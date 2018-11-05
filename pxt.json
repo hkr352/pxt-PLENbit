@@ -17,5 +17,6 @@
     "public": false,
     "yotta": {
         "config": {}
-    }
+    },
+    "installedVersion": "workspace:e8c1344d-cc0e-4872-23e3-0261a1fb12c7"
 }

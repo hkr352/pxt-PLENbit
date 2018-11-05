@@ -98,22 +98,22 @@ namespace plenbit {
         pins.i2cWriteBuffer(0x6A, cmd, false);
     }
 
-    //% blockId=PLEN:bit_motion_s
+    //% blockId=PLEN:bit_motion_std
     //% block="std_Motion %filename"
     export function std_motion(filename: stdMotions) {
         motion(filename);
     }
-    //% blockId=PLEN:bit_motion_s
+    //% blockId=PLEN:bit_motion_Soc
     //% block="Soccer_motion %filename"
     export function soccer_motion(filename: socMotions) {
         motion(filename);
     }
-    //% blockId=PLEN:bit_motion_b
+    //% blockId=PLEN:bit_motion_box
     //% block="Box_Motion %filename"
     export function box_motion(filename: boxMotions) {
         motion(filename);
     }
-    //% blockId=PLEN:bit_motion_d
+    //% blockId=PLEN:bit_motion_dan
     //% block="Dance_Motion %filename"
     export function dance_motion(filename: danceMotions) {
         motion(filename);
