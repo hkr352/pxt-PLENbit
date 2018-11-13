@@ -133,6 +133,12 @@ namespace plenbit {
         let command = ">";//0x3e
         let list_len = 43;
         let _read_adr = 0x32 + 860 * filename;
+        //serial.writeNumber(filename)
+        //serial.writeString(",filename")
+        //serial.writeNumber(_read_adr)
+        //serial.writeString(",adr")
+
+
         let error = 0;
 
         while (1) {
@@ -193,6 +199,8 @@ namespace plenbit {
                         num_h = num_h & 0xffff;
                     }
                     data[val] = num_h;
+                    //serial.writeNumber(data[val]);
+                    //serial.writeString(",")
                     val = val + 1;
                     _ls_n += 4;
                 }
@@ -299,6 +307,24 @@ namespace plenbit {
                 case "f":
                     num[i] = 15;
                     break;
+                case "A":
+                    num[i] = 10;
+                    break;
+                case "B":
+                    num[i] = 11;
+                    break;
+                case "C":
+                    num[i] = 12;
+                    break;
+                case "D":
+                    num[i] = 13;
+                    break;
+                case "E":
+                    num[i] = 14;
+                    break;
+                case "F":
+                    num[i] = 15;
+                    break;
                 default:
                     num[i] = parseInt(str[i]);
                     break;
@@ -379,6 +405,7 @@ namespace plenbit {
             let _buf = buf[1] + buf[2];
             if (_buf == "PM") {
                 _buf = buf[3] + buf[4];
+                //basic.showString(_buf);
                 motion(parseInt_m(_buf));
                 break
             } else if (_buf == "SM") {
