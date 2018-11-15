@@ -76,7 +76,11 @@ namespace plenbit {
         write8(0x00, 0x01)
     }
 
-    function servoWrite(num: number, degrees: number) {
+    //% blockId=PLEN:bit_servo
+    //% block="サーボモータ %num|番を %degrees|度にする"
+    //% num.min=0 num.max=11
+    //% degrees.min=0 degrees.max=180
+    export function servoWrite(num: number, degrees: number) {
         let HighByte = false;
         let PWMVal = degrees * 100 * 226 / 10000;
         PWMVal = Math.round(PWMVal) + 0x66;
