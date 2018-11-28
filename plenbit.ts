@@ -7,11 +7,21 @@
 
 namespace plenbit {
 
+    let Motion_Speed = 15;
     let SERVO_NUM = 0x08;
     let SERVO_SET_INIT = [1000, 630, 300, 600, 240, 600, 1000, 720];
     let SERVO_ANGLE = [1000, 630, 300, 600, 240, 600, 1000, 720];
     let romADR1 = 0x56;
     let init_BLE = false;
+
+    export enum LED_LR{
+        右 = 16,
+        左 = 8
+    }
+    export enum LED_onoff{
+        オン = 0,
+        オフ = 1
+    }
 
     export enum stdMotions {
         左ステップ = 0x00,
@@ -21,19 +31,19 @@ namespace plenbit {
         おじき = 0x04,
         こくはく = 0x05,
         ハグ = 0x06,
-        拍手 = 0x07,
+        はくしゅ = 0x07,
         ハイタッチ = 0x08
     }
     export enum boxMotions {
         箱をふる = 0x0a,
         箱を高くとる = 0x0b,
         箱を低くとる = 0x0c,
-        箱を受け取る = 0x0d,
+        箱をうけとる = 0x0d,
         箱をあげる = 0x0e,
         箱をわたす = 0x0f,
         箱をなげる = 0x10,
-        箱を落とす = 0x11,
-        箱を置く = 0x12
+        箱をおとす = 0x11,
+        箱をおく = 0x12
     }
     export enum socMotions {
         左ディフェンス = 0x14,
@@ -360,7 +370,7 @@ namespace plenbit {
 
     function setAngle(angle: number[], msec: number) {
         let _step = [0, 0, 0, 0, 0, 0, 0, 0];
-        let _msec = msec / 10; //20   Speed Adj
+        let _msec = msec / Motion_Speed ;//default 10; //speedy 20   Speed Adj
         for (let _val = 0; _val < 8; _val++) {
             let _target = (SERVO_SET_INIT[_val] - angle[_val]);
             if (_target != SERVO_ANGLE[_val]) {  // Target != Present
@@ -421,4 +431,31 @@ namespace plenbit {
         }
         pins.digitalWritePin(DigitalPin.P16, 0);
     }
+    
+    //% blockId=PLEN:bit_eye
+    //% block="%LR|目のLEDを %onoff|にする"
+    export function eyeLed(led_lr:LED_LR, led_onoff:LED_onoff) {
+        if (led_lr == 8){
+            pins.digitalWritePin(DigitalPin.P8, led_onoff);
+        } 
+        if (led_lr == 16) {
+            pins.digitalWritePin(DigitalPin.P16, led_onoff);
+        //23 or 15
+        }
+    }
+    /**
+     * This is no test.
+    **/
+    //% blockId=PLEN:bit_Sensor
+    //% block="センサー%num|の値を読み取る"
+    export function sensorLR(num: LED_LR) {
+        let neko = 0;
+        if(num = 16){
+            neko = AnalogPin.P2;
+        }else{
+            neko = AnalogPin.P0;
+        }
+        return pins.analogReadPin(neko);
+    }
+
 }
