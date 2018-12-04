@@ -15,36 +15,36 @@ namespace plenbit {
     let init_BLE = false;
 
     export enum LED_LR{
-        //% block=Right
+        //% block=right
         Right = 16,
-        //% block=Left
+        //% block=left
         Left = 8
     }
     export enum LED_onoff{
-        //% block=ON
+        //% block=on
         ON = 0,
-        //% block=OFF
+        //% block=off
         OFF = 1
     }
 
     export enum stdMotions {
-        //% block=Lstep
+        //% block=lstep
         Lstep = 0x00,
-        //% block=Fstep
+        //% block=fstep
         Fstep = 0x01,
-        //% block=Rstep
+        //% block=rstep
         Rstep = 0x02,
-        //% block=A_hem
+        //% block=a_hem
         A_hem = 0x03,
-        //% block=Bow
+        //% block=bow
         Bow = 0x04,
-        //% block=Propose
+        //% block=propose
         Propose = 0x05,
-        //% block=Hug
+        //% block=hug
         Hug = 0x06,
-        //% block=Clap
+        //% block=clap
         Clap = 0x07,
-        //% block=Highfive
+        //% block=highfive
         Highfive = 0x08
     }
     export enum boxMotions {
@@ -59,56 +59,56 @@ namespace plenbit {
         PutDownLow = 0x12
     }
     export enum socMotions {
-        //% block=DefenseLStep
+        //% block=defenseLStep
         DefenseLStep = 0x14,
-        //% block=Dribble
+        //% block=dribble
         Dribble = 0x15,
-        //% block=DefenseRStep
+        //% block=defenseRStep
         DefenseRStep = 0x16,
-        //% block=LKick
+        //% block=lKick
         LKick = 0x17,
-        //% block=LongDribble
+        //% block=longDribble
         LongDribble = 0x18,
-        //% block=RKick
+        //% block=rKick
         RKick = 0x19,
-        //% block=PassToLeft
+        //% block=passToLeft
         PassToLeft = 0x1a,
-        //% block=PassItToMe
+        //% block=passItToMe
         PassItToMe = 0x1b,
-        //% block=PassToRight
+        //% block=passToRight
         PassToRight = 0x1c
         //% block=
     }
     export enum danceMotions {
-        //% block=DanceLStep
+        //% block=danceLStep
         DanceLStep = 0x1e,
-        //% block=DanceFStep
+        //% block=danceFStep
         DanceFStep = 0x1f,
-        //% block=DanceRStep
+        //% block=danceRStep
         DanceRStep = 0x20,
-        //% block=DanceFisnishPose
+        //% block=danceFisnishPose
         DanceFisnishPose = 0x21,
-        //% block=DanceUpDown
+        //% block=danceUpDown
         DanceUpDown = 0x22,
-        //% block=WiggleDance
+        //% block=wiggleDance
         WiggleDance = 0x23,
-        //% block=DanceBStep
+        //% block=danceBStep
         DanceBStep = 0x24,
-        //% block=DanceBow
+        //% block=danceBow
         DanceBow = 0x25,
-        //% block=TwistDance
+        //% block=twistDance
         TwistDance = 0x26
     }
     export enum moveMotions {
-        //% block=WalkForward
+        //% block=walkForward
         WalkForward = 0x46,
-        //% block=WalkLTurn
+        //% block=walkLTurn
         WalkLTurn = 0x47,
-        //% block=WalkRTurn
+        //% block=walkRTurn
         WalkRTurn = 0x48,
-        //% block=WalkBack
+        //% block=walkBack
         WalkBack = 0x49,
-        //% block=ArmPataPata
+        //% block=armPataPata
         ArmPataPata = 0x29
     }
     secretIncantation();
