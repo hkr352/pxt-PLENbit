@@ -154,36 +154,36 @@ namespace plenbit {
     }
 
     //% blockId=PLEN:bit_motion_std
-    //% block="std_Motion  %filename|Play"
+    //% block="Play std_Motion %filename"
     export function std_motion(filename: stdMotions) {
         motion(filename);
     }
     //% blockId=PLEN:bit_motion_Soc
-    //% block="Soccer_motion  %filename|Play"
+    //% block="Play Soccer_motion %filename"
     export function soccer_motion(filename: socMotions) {
         motion(filename);
     }
     
     // blockId=PLEN:bit_motion_box
-    // block="Box_Motion  %filename|Play"
+    // block="Play Box_Motion %filename"
     //export function box_motion(filename: boxMotions) {
     //    motion(filename);
     //}
 
     //% blockId=PLEN:bit_motion_dan
-    //% block="Dance_Motion  %filename|Play"
+    //% block="Play Dance_Motion %filename"
     export function dance_motion(filename: danceMotions) {
         motion(filename);
     }
     //% blockId=PLEN:bit_motion_m
-    //% block="Move_Motion  %filename|Play"
+    //% block="Play Move_Motion %filename"
     export function Move_motion(filename: moveMotions) {
         motion(filename);
     }
 
 
     //% blockId=PLEN:bit_motion
-    //% block="Motion Number %filename|Play"
+    //% block="Play Motion Number %filename"
     //% filename.min=0 filename.max=73
     export function motion(filename: number) {
         let data = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
@@ -476,7 +476,7 @@ namespace plenbit {
     }
     
     //% blockId=PLEN:bit_eye
-    //% block="%LR|Eye LED is %onoff|"
+    //% block="%LR|Eye LED is %onoff"
     export function eyeLed(led_lr:LED_LR, led_onoff:LED_onoff) {
         if (led_lr == 8){
             pins.digitalWritePin(DigitalPin.P8, led_onoff);
@@ -490,7 +490,7 @@ namespace plenbit {
      * This is no test.
     **/
     //% blockId=PLEN:bit_Sensor
-    //% block="Sensor %num|Read"
+    //% block="Read Sensor %num"
     export function sensorLR(num: LED_LR) {
         let neko = 0;
         if(num = 16){
