@@ -1,9 +1,6 @@
 //plenbit.ts
 
-/**
- * Blocks for PLEN:bit
- */
-//% weight=100 color=#00A654 icon="\uf085" block="PLEN:bit"
+
 
 
 enum LED_LR{
@@ -104,6 +101,10 @@ enum moveMotions {
     ArmPataPata = 0x29
 }
 
+/**
+ * Blocks for PLEN:bit
+ */
+//% weight=100 color=#00A654 icon="\uf085" block="PLEN:bit"
 namespace plenbit {
 
     let Motion_Speed = 15;
