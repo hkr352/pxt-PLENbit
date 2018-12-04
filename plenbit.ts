@@ -493,7 +493,7 @@ namespace plenbit {
     //% block="Read Sensor %num"
     export function sensorLR(num: LED_LR) {
         let neko = 0;
-        if(num = 16){
+        if(num == 16){
             neko = AnalogPin.P2;
         }else{
             neko = AnalogPin.P0;
