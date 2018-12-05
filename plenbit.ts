@@ -1,40 +1,47 @@
 //plenbit.ts
 
-
-
-
 enum LED_LR{
-    //% block=right
+    //% block=Right
     Right = 16,
-    //% block=left
+    //% block=Left
     Left = 8
 }
 enum LED_onoff{
-    //% block=on
+    //% block=ON
     ON = 0,
-    //% block=off
+    //% block=OFF
     OFF = 1
 }
 
 enum stdMotions {
-    //% block=lstep
+    //% block=WalkForward
+    WalkForward = 0x46,
+    //% block=WalkLTurn
+    WalkLTurn = 0x47,
+    //% block=WalkRTurn
+    WalkRTurn = 0x48,
+    //% block=WalkBack
+    WalkBack = 0x49,
+    //% block=Lstep
     Lstep = 0x00,
-    //% block=fstep
+    //% block=Fstep
     Fstep = 0x01,
-    //% block=rstep
+    //% block=Rstep
     Rstep = 0x02,
-    //% block=a_hem
+    //% block=A_hem
     A_hem = 0x03,
-    //% block=bow
+    //% block=Bow
     Bow = 0x04,
-    //% block=propose
+    //% block=Propose
     Propose = 0x05,
-    //% block=hug
+    //% block=Hug
     Hug = 0x06,
-    //% block=clap
+    //% block=Clap
     Clap = 0x07,
-    //% block=highfive
-    Highfive = 0x08
+    //% block=Highfive
+    Highfive = 0x08,
+    //% block=ArmPataPata
+    ArmPataPata = 0x29
 }
 enum boxMotions {
     Shake_a_Box = 0x0a,
@@ -48,57 +55,47 @@ enum boxMotions {
     PutDownLow = 0x12
 }
 enum socMotions {
-    //% block=defenseLStep
+    //% block=DefenseLStep
     DefenseLStep = 0x14,
-    //% block=dribble
+    //% block=Dribble
     Dribble = 0x15,
-    //% block=defenseRStep
+    //% block=DefenseRStep
     DefenseRStep = 0x16,
-    //% block=lKick
+    //% block=LKick
     LKick = 0x17,
-    //% block=longDribble
+    //% block=LongDribble
     LongDribble = 0x18,
-    //% block=rKick
+    //% block=RKick
     RKick = 0x19,
-    //% block=passToLeft
+    //% block=PassToLeft
     PassToLeft = 0x1a,
-    //% block=passItToMe
+    //% block=PassItToMe
     PassItToMe = 0x1b,
-    //% block=passToRight
+    //% block=PassToRight
     PassToRight = 0x1c
-    //% block=
 }
 enum danceMotions {
-    //% block=danceLStep
+    //% block=DanceLStep
     DanceLStep = 0x1e,
-    //% block=danceFStep
+    //% block=DanceFStep
     DanceFStep = 0x1f,
-    //% block=danceRStep
+    //% block=DanceRStep
     DanceRStep = 0x20,
-    //% block=danceFisnishPose
+    //% block=DanceFisnishPose
     DanceFisnishPose = 0x21,
-    //% block=danceUpDown
+    //% block=DanceUpDown
     DanceUpDown = 0x22,
-    //% block=wiggleDance
+    //% block=WiggleDance
     WiggleDance = 0x23,
-    //% block=danceBStep
+    //% block=DanceBStep
     DanceBStep = 0x24,
-    //% block=danceBow
+    //% block=DanceBow
     DanceBow = 0x25,
-    //% block=twistDance
+    //% block=TwistDance
     TwistDance = 0x26
 }
 enum moveMotions {
-    //% block=walkForward
-    WalkForward = 0x46,
-    //% block=walkLTurn
-    WalkLTurn = 0x47,
-    //% block=walkRTurn
-    WalkRTurn = 0x48,
-    //% block=walkBack
-    WalkBack = 0x49,
-    //% block=armPataPata
-    ArmPataPata = 0x29
+
 }
 
 /**
@@ -113,7 +110,6 @@ namespace plenbit {
     let SERVO_ANGLE = [1000, 630, 300, 600, 240, 600, 1000, 720];
     let romADR1 = 0x56;
     let init_BLE = false;
-
 
     secretIncantation();
     setAngle([0, 0, 0, 0, 0, 0, 0, 0], 1000);
@@ -166,17 +162,18 @@ namespace plenbit {
     
     // blockId=PLEN:bit_motion_box
     // block="Play Box_Motion %filename"
-    //export function box_motion(filename: boxMotions) {
-    //    motion(filename);
-    //}
+    export function box_motion(filename: boxMotions) {
+        motion(filename);
+    }
 
     //% blockId=PLEN:bit_motion_dan
     //% block="Play Dance_Motion %filename"
     export function dance_motion(filename: danceMotions) {
         motion(filename);
     }
-    //% blockId=PLEN:bit_motion_m
-    //% block="Play Move_Motion %filename"
+    
+    // blockId=PLEN:bit_motion_m
+    // block="Play Move_Motion %filename"
     export function Move_motion(filename: moveMotions) {
         motion(filename);
     }
