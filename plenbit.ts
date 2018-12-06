@@ -112,17 +112,18 @@ namespace plenbit {
     let SERVO_ANGLE = [1000, 630, 300, 600, 240, 600, 1000, 720];
     let romADR1 = 0x56;
     let init_BLE = false;
+    let init_PCA9865 = false;
 
     secretIncantation();
     setAngle([0, 0, 0, 0, 0, 0, 0, 0], 1000);
 
     function secretIncantation() {
-        write8(0xFE, 0x85)
-        write8(0xFA, 0x00)
-        write8(0xFB, 0x00)
-        write8(0xFC, 0x66)
-        write8(0xFD, 0x00)
-        write8(0x00, 0x01)
+        write8(0xFE, 0x85);
+        write8(0xFA, 0x00);
+        write8(0xFB, 0x00);
+        write8(0xFC, 0x66);
+        write8(0xFD, 0x00);
+        write8(0x00, 0x01);
     }
 
     //% blockId=PLEN:bit_servo
@@ -130,6 +131,11 @@ namespace plenbit {
     //% num.min=0 num.max=11
     //% degrees.min=0 degrees.max=180
     export function servoWrite(num: number, degrees: number) {
+        if (init_PCA9865 == false) {
+            secretIncantation();
+            setAngle([0, 0, 0, 0, 0, 0, 0, 0], 1000);
+            init_PCA9865 = true;
+        }
         let HighByte = false;
         let PWMVal = degrees * 100 * 226 / 10000;
         PWMVal = Math.round(PWMVal) + 0x66;
