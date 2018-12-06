@@ -1,108 +1,110 @@
 //plenbit.ts
 
-enum LED_LR{
-    //% block=Right
-    Right = 16,
-    //% block=Left
-    Left = 8
-}
-enum LED_onoff{
-    //% block=ON
-    ON = 0,
-    //% block=OFF
-    OFF = 1
-}
 
-enum stdMotions {
-    //% block=WalkForward
-    WalkForward = 0x46,
-    //% block=WalkLTurn
-    WalkLTurn = 0x47,
-    //% block=WalkRTurn
-    WalkRTurn = 0x48,
-    //% block=WalkBack
-    WalkBack = 0x49,
-    //% block=Lstep
-    Lstep = 0x00,
-    //% block=Fstep
-    Fstep = 0x01,
-    //% block=Rstep
-    Rstep = 0x02,
-    //% block=A_hem
-    A_hem = 0x03,
-    //% block=Bow
-    Bow = 0x04,
-    //% block=Propose
-    Propose = 0x05,
-    //% block=Hug
-    Hug = 0x06,
-    //% block=Clap
-    Clap = 0x07,
-    //% block=Highfive
-    Highfive = 0x08,
-    //% block=ArmPataPata
-    ArmPataPata = 0x29
-}
-enum boxMotions {
-    Shake_a_Box = 0x0a,
-    PickUpHigh = 0x0b,
-    PickUpLow = 0x0c,
-    ReceiveaBox = 0x0d,
-    PresentaBox = 0x0e,
-    PassaBox = 0x0f,
-    ThrowaBox = 0x10,
-    PutDownHigh = 0x11,
-    PutDownLow = 0x12
-}
-enum socMotions {
-    //% block=DefenseLStep
-    DefenseLStep = 0x14,
-    //% block=Dribble
-    Dribble = 0x15,
-    //% block=DefenseRStep
-    DefenseRStep = 0x16,
-    //% block=LKick
-    LKick = 0x17,
-    //% block=LongDribble
-    LongDribble = 0x18,
-    //% block=RKick
-    RKick = 0x19,
-    //% block=PassToLeft
-    PassToLeft = 0x1a,
-    //% block=PassItToMe
-    PassItToMe = 0x1b,
-    //% block=PassToRight
-    PassToRight = 0x1c
-}
-enum danceMotions {
-    //% block=DanceLStep
-    DanceLStep = 0x1e,
-    //% block=DanceFStep
-    DanceFStep = 0x1f,
-    //% block=DanceRStep
-    DanceRStep = 0x20,
-    //% block=DanceFisnishPose
-    DanceFisnishPose = 0x21,
-    //% block=DanceUpDown
-    DanceUpDown = 0x22,
-    //% block=WiggleDance
-    WiggleDance = 0x23,
-    //% block=DanceBStep
-    DanceBStep = 0x24,
-    //% block=DanceBow
-    DanceBow = 0x25,
-    //% block=TwistDance
-    TwistDance = 0x26
-}
-enum moveMotions {
-
-}
 
 /**
  * Blocks for PLEN:bit
  */
 //% weight=100 color=#00A654 icon="\uf085" block="PLEN:bit"
 namespace plenbit {
+
+    export enum LED_LR{
+        //% block=Right
+        Right = 16,
+        //% block=Left
+        Left = 8
+    }
+    export enum LED_onoff{
+        //% block=ON
+        ON = 0,
+        //% block=OFF
+        OFF = 1
+    }
+
+    export enum stdMotions {
+        //% block=WalkForward
+        WalkForward = 0x46,
+        //% block=WalkLTurn
+        WalkLTurn = 0x47,
+        //% block=WalkRTurn
+        WalkRTurn = 0x48,
+        //% block=WalkBack
+        WalkBack = 0x49,
+        //% block=Lstep
+        Lstep = 0x00,
+        //% block=Fstep
+        Fstep = 0x01,
+        //% block=Rstep
+        Rstep = 0x02,
+        //% block=A_hem
+        A_hem = 0x03,
+        //% block=Bow
+        Bow = 0x04,
+        //% block=Propose
+        Propose = 0x05,
+        //% block=Hug
+        Hug = 0x06,
+        //% block=Clap
+        Clap = 0x07,
+        //% block=Highfive
+        Highfive = 0x08,
+        //% block=ArmPataPata
+        ArmPataPata = 0x29
+    }
+    export enum boxMotions {
+        Shake_a_Box = 0x0a,
+        PickUpHigh = 0x0b,
+        PickUpLow = 0x0c,
+        ReceiveaBox = 0x0d,
+        PresentaBox = 0x0e,
+        PassaBox = 0x0f,
+        ThrowaBox = 0x10,
+        PutDownHigh = 0x11,
+        PutDownLow = 0x12
+    }
+    export enum socMotions {
+        //% block=DefenseLStep
+        DefenseLStep = 0x14,
+        //% block=Dribble
+        Dribble = 0x15,
+        //% block=DefenseRStep
+        DefenseRStep = 0x16,
+        //% block=LKick
+        LKick = 0x17,
+        //% block=LongDribble
+        LongDribble = 0x18,
+        //% block=RKick
+        RKick = 0x19,
+        //% block=PassToLeft
+        PassToLeft = 0x1a,
+        //% block=PassItToMe
+        PassItToMe = 0x1b,
+        //% block=PassToRight
+        PassToRight = 0x1c
+    }
+    export enum danceMotions {
+        //% block=DanceLStep
+        DanceLStep = 0x1e,
+        //% block=DanceFStep
+        DanceFStep = 0x1f,
+        //% block=DanceRStep
+        DanceRStep = 0x20,
+        //% block=DanceFisnishPose
+        DanceFisnishPose = 0x21,
+        //% block=DanceUpDown
+        DanceUpDown = 0x22,
+        //% block=WiggleDance
+        WiggleDance = 0x23,
+        //% block=DanceBStep
+        DanceBStep = 0x24,
+        //% block=DanceBow
+        DanceBow = 0x25,
+        //% block=TwistDance
+        TwistDance = 0x26
+    }
+    enum moveMotions {
+
+    }
 
     let Motion_Speed = 15;
     let SERVO_NUM = 0x08;
