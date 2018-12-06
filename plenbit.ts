@@ -133,7 +133,7 @@ namespace plenbit {
     export function servoWrite(num: number, degrees: number) {
         if (init_PCA9865 == false) {
             secretIncantation();
-            setAngle([0, 0, 0, 0, 0, 0, 0, 0], 1000);
+            //setAngle([0, 0, 0, 0, 0, 0, 0, 0], 1000);
             init_PCA9865 = true;
         }
         let HighByte = false;
