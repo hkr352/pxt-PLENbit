@@ -115,7 +115,12 @@ namespace plenbit {
     let init_PCA9865 = false;
 
     //secretIncantation();
-    //setAngle([0, 0, 0, 0, 0, 0, 0, 0], 1000);
+
+    //% blockId=PLEN:bit_servo_init
+    //% block="ServoMotor_initial"
+    funciton servo_initial_set(){
+    	setAngle([0, 0, 0, 0, 0, 0, 0, 0], 1000);
+	}
 
     function secretIncantation() {
         write8(0xFE, 0x85);
