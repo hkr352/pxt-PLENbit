@@ -421,7 +421,7 @@ namespace plenbit {
         return mf;
     }
 
-    function setAngle(angle: number[], msec: number) {
+    export function setAngle(angle: number[], msec: number) {
         let _step = [0, 0, 0, 0, 0, 0, 0, 0];
         let _msec = msec / Motion_Speed;//default 10; //speedy 20   Speed Adj
         for (let _val = 0; _val < 8; _val++) {
