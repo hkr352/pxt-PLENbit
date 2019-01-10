@@ -54,6 +54,7 @@
   "plenbit.servoWrite|block": "サーボモータ %num|番を %degrees|度にする",
   "plenbit.soccer_motion|block": "サッカーモーション %filename|の再生",
   "plenbit.std_motion|block": "基本モーション %filename|の再生",
+  "plenbit.servo_initial_set|block":"サーボモータ初期値設定",
   "plenbit|block": "PLEN:bit",
   "{id:category}Plenbit": "Plenbit"
 }

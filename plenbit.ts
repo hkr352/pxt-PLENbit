@@ -8,13 +8,13 @@
 //% weight=100 color=#00A654 icon="\uf085" block="PLEN:bit"
 namespace plenbit {
 
-    export enum LED_LR{
+    export enum LED_LR {
         //% block=Right
         Right = 16,
         //% block=Left
         Left = 8
     }
-    export enum LED_onoff{
+    export enum LED_onoff {
         //% block=ON
         ON = 0,
         //% block=OFF
@@ -118,9 +118,9 @@ namespace plenbit {
 
     //% blockId=PLEN:bit_servo_init
     //% block="ServoMotor_initial"
-    function servo_initial_set(){
-    	setAngle([0, 0, 0, 0, 0, 0, 0, 0], 1000);
-	}
+    export function servo_initial_set() {
+        setAngle([0, 0, 0, 0, 0, 0, 0, 0], 1000);
+    }
 
     function secretIncantation() {
         write8(0xFE, 0x85);
@@ -172,7 +172,7 @@ namespace plenbit {
     export function soccer_motion(filename: socMotions) {
         motion(filename);
     }
-    
+
     // blockId=PLEN:bit_motion_box
     // block="Play Box_Motion %filename"
     export function box_motion(filename: boxMotions) {
@@ -184,7 +184,7 @@ namespace plenbit {
     export function dance_motion(filename: danceMotions) {
         motion(filename);
     }
-    
+
     // blockId=PLEN:bit_motion_m
     // block="Play Move_Motion %filename"
     export function Move_motion(filename: moveMotions) {
@@ -423,7 +423,7 @@ namespace plenbit {
 
     function setAngle(angle: number[], msec: number) {
         let _step = [0, 0, 0, 0, 0, 0, 0, 0];
-        let _msec = msec / Motion_Speed ;//default 10; //speedy 20   Speed Adj
+        let _msec = msec / Motion_Speed;//default 10; //speedy 20   Speed Adj
         for (let _val = 0; _val < 8; _val++) {
             let _target = (SERVO_SET_INIT[_val] - angle[_val]);
             if (_target != SERVO_ANGLE[_val]) {  // Target != Present
@@ -484,16 +484,16 @@ namespace plenbit {
         }
         pins.digitalWritePin(DigitalPin.P16, 0);
     }
-    
+
     //% blockId=PLEN:bit_eye
     //% block="%LR|Eye LED is %onoff"
-    export function eyeLed(led_lr:LED_LR, led_onoff:LED_onoff) {
-        if (led_lr == 8){
+    export function eyeLed(led_lr: LED_LR, led_onoff: LED_onoff) {
+        if (led_lr == 8) {
             pins.digitalWritePin(DigitalPin.P8, led_onoff);
-        } 
+        }
         if (led_lr == 16) {
             pins.digitalWritePin(DigitalPin.P16, led_onoff);
-        //23 or 15
+            //23 or 15
         }
     }
     /**
@@ -503,9 +503,9 @@ namespace plenbit {
     //% block="Read Sensor %num"
     export function sensorLR(num: LED_LR) {
         let neko = 0;
-        if(num == 16){
+        if (num == 16) {
             neko = AnalogPin.P2;
-        }else{
+        } else {
             neko = AnalogPin.P0;
         }
         return pins.analogReadPin(neko);
