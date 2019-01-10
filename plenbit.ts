@@ -1,7 +1,5 @@
 //plenbit.ts
 
-
-
 /**
  * Blocks for PLEN:bit
  */
@@ -116,8 +114,8 @@ namespace plenbit {
 
     //secretIncantation();
 
-    // blockId=PLEN:bit_servo_init
-    // block="ServoMotor_initial"
+    //% blockId=PLEN:bit_servo_init
+    //% block="ServoMotor_initial"
     export function servo_initial_set() {
         setAngle([0, 0, 0, 0, 0, 0, 0, 0], 1000);
     }
