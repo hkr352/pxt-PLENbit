@@ -118,7 +118,7 @@ namespace plenbit {
 
     //% blockId=PLEN:bit_servo_init
     //% block="ServoMotor_initial"
-    funciton servo_initial_set(){
+    function servo_initial_set(){
     	setAngle([0, 0, 0, 0, 0, 0, 0, 0], 1000);
 	}
 
