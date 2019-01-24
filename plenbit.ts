@@ -114,19 +114,29 @@ namespace plenbit {
 
     //secretIncantation();
 
-    //% blockId=PLEN:bit_servo_init
     //% block="ServoMotor_initial"
     export function servo_initial_set() {
         setAngle([0, 0, 0, 0, 0, 0, 0, 0], 1000);
     }
 
     function secretIncantation() {
-        write8(0xFE, 0x85);
+        write8(0xFE, 0x85);//PRE_SCALE
+        write8(0xFA, 0x00);//ALL_LED_ON_L
+        write8(0xFB, 0x00);//ALL_LED_ON_H
+        write8(0xFC, 0x66);//ALL_LED_OFF_L
+        write8(0xFD, 0x00);//ALL_LED_OFF_H
+        write8(0x00, 0x01);
+    }
+
+    //% block
+    export function servoFree() {
+        //Power Free!
         write8(0xFA, 0x00);
         write8(0xFB, 0x00);
-        write8(0xFC, 0x66);
+        write8(0xFC, 0x00);
         write8(0xFD, 0x00);
         write8(0x00, 0x01);
+        //write8(0x00, 0x80);
     }
 
     //% blockId=PLEN:bit_servo
@@ -136,7 +146,6 @@ namespace plenbit {
     export function servoWrite(num: number, degrees: number) {
         if (init_PCA9865 == false) {
             secretIncantation();
-            //setAngle([0, 0, 0, 0, 0, 0, 0, 0], 1000);
             init_PCA9865 = true;
         }
         let HighByte = false;
@@ -483,7 +492,10 @@ namespace plenbit {
         pins.digitalWritePin(DigitalPin.P16, 0);
     }
 
-    //% blockId=PLEN:bit_eye
+
+    /**
+     * This is no work.
+    **/
     //% block="%LR|Eye LED is %onoff"
     export function eyeLed(led_lr: LED_LR, led_onoff: LED_onoff) {
         if (led_lr == 8) {
@@ -494,9 +506,7 @@ namespace plenbit {
             //23 or 15
         }
     }
-    /**
-     * This is no test.
-    **/
+
     //% blockId=PLEN:bit_Sensor
     //% block="Read Sensor %num"
     export function sensorLR(num: LED_LR) {
