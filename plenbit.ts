@@ -137,6 +137,7 @@ namespace plenbit {
         write8(0xFD, 0x00);
         write8(0x00, 0x01);
         //write8(0x00, 0x80);
+        init_PCA9865 == false
     }
 
     //% blockId=PLEN:bit_servo
