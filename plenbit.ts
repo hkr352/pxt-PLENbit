@@ -114,10 +114,7 @@ namespace plenbit {
 
     //secretIncantation();
 
-    //% block="ServoMotor_initial"
-    export function servo_initial_set() {
-        setAngle([0, 0, 0, 0, 0, 0, 0, 0], 1000);
-    }
+
 
     function secretIncantation() {
         write8(0xFE, 0x85);//PRE_SCALE
@@ -128,16 +125,21 @@ namespace plenbit {
         write8(0x00, 0x01);
     }
 
+    //% blockId=PLEN:bit_Sensor
+    //% block="Read Sensor %num"
+    export function sensorLR(num: LED_LR) {
+        let neko = 0;
+        if (num == 16) {
+            neko = AnalogPin.P2;
+        } else {
+            neko = AnalogPin.P0;
+        }
+        return pins.analogReadPin(neko);
+    }
+
     //% block
-    export function servoFree() {
-        //Power Free!
-        write8(0xFA, 0x00);
-        write8(0xFB, 0x00);
-        write8(0xFC, 0x00);
-        write8(0xFD, 0x00);
-        write8(0x00, 0x01);
-        //write8(0x00, 0x80);
-        init_PCA9865 == false
+    export function direction() {
+        return Math.atan2(input.magneticForce(Dimension.X), input.magneticForce(Dimension.Z)) * 180 / 3.14 + 180
     }
 
     //% blockId=PLEN:bit_servo
@@ -198,7 +200,6 @@ namespace plenbit {
     export function Move_motion(filename: moveMotions) {
         motion(filename);
     }
-
 
     //% blockId=PLEN:bit_motion
     //% block="Play Motion Number %filename"
@@ -494,6 +495,24 @@ namespace plenbit {
     }
 
 
+
+
+    //% block="ServoMotor_initial"
+    export function servo_initial_set() {
+        setAngle([0, 0, 0, 0, 0, 0, 0, 0], 1000);
+    }
+    //% block
+    export function servoFree() {
+        //Power Free!
+        write8(0xFA, 0x00);
+        write8(0xFB, 0x00);
+        write8(0xFC, 0x00);
+        write8(0xFD, 0x00);
+        write8(0x00, 0x01);
+        //write8(0x00, 0x80);
+        init_PCA9865 == false
+    }
+
     /**
      * This is no work.
     **/
@@ -506,18 +525,6 @@ namespace plenbit {
             pins.digitalWritePin(DigitalPin.P16, led_onoff);
             //23 or 15
         }
-    }
-
-    //% blockId=PLEN:bit_Sensor
-    //% block="Read Sensor %num"
-    export function sensorLR(num: LED_LR) {
-        let neko = 0;
-        if (num == 16) {
-            neko = AnalogPin.P2;
-        } else {
-            neko = AnalogPin.P0;
-        }
-        return pins.analogReadPin(neko);
     }
 
 }
