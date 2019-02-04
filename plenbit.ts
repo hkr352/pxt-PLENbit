@@ -7,9 +7,9 @@
 namespace plenbit {
 
     export enum LED_LR {
-        //% block=Right
+        //% block=B button side
         Right = 16,
-        //% block=Left
+        //% block=A button side
         Left = 8
     }
     export enum LED_onoff {

@@ -1,6 +1,6 @@
 {
-  "plenbit.LED_LR.Right|block":"右",
-  "plenbit.LED_LR.Left|block":"左",
+  "plenbit.LED_LR.Right|block":"Bボタン側",
+  "plenbit.LED_LR.Left|block":"Aボタン側",
   "plenbit.LED_onoff.ON|block":"オン",
   "plenbit.LED_onoff.OFF|block":"オフ",
   "plenbit.stdMotions.Lstep|block":"左ステップ",
