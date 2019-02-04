@@ -7,48 +7,48 @@
 namespace plenbit {
 
     export enum LED_LR {
-        //% block=B button side
-        Right = 16,
-        //% block=A button side
-        Left = 8
+        //% block="A button side"
+        A_button_side = 8,
+        //% block="B button side"
+        B_button_side = 16
     }
     export enum LED_onoff {
-        //% block=ON
+        //% block="ON"
         ON = 0,
-        //% block=OFF
+        //% block="OFF"
         OFF = 1
     }
-
     export enum stdMotions {
-        //% block=WalkForward
+        //% block="Walk Forward"
         WalkForward = 0x46,
-        //% block=WalkLTurn
+        //% block="Walk Left Turn"
         WalkLTurn = 0x47,
-        //% block=WalkRTurn
+        //% block="Walk Right Turn"
         WalkRTurn = 0x48,
-        //% block=WalkBack
+        //% block="Walk Back"
         WalkBack = 0x49,
-        //% block=Lstep
+        //% block="Left step"
         Lstep = 0x00,
-        //% block=Fstep
+        //% block="Forward step"
         Fstep = 0x01,
-        //% block=Rstep
+        //% block="Right tep"
         Rstep = 0x02,
-        //% block=A_hem
+        //% block="A hem"
         A_hem = 0x03,
-        //% block=Bow
+        //% block="Bow"
         Bow = 0x04,
-        //% block=Propose
+        //% block="Propose"
         Propose = 0x05,
-        //% block=Hug
+        //% block="Hug"
         Hug = 0x06,
-        //% block=Clap
+        //% block="Clap"
         Clap = 0x07,
-        //% block=Highfive
+        //% block="High five"
         Highfive = 0x08,
-        //% block=ArmPataPata
+        //% block="Arm PataPata"
         ArmPataPata = 0x29
     }
+
     export enum boxMotions {
         Shake_a_Box = 0x0a,
         PickUpHigh = 0x0b,
@@ -61,43 +61,43 @@ namespace plenbit {
         PutDownLow = 0x12
     }
     export enum socMotions {
-        //% block=DefenseLStep
+        //% block="Defense Left Step"
         DefenseLStep = 0x14,
-        //% block=Dribble
+        //% block="Dribble"
         Dribble = 0x15,
-        //% block=DefenseRStep
+        //% block="Defense Right Step"
         DefenseRStep = 0x16,
-        //% block=LKick
+        //% block="Left Kick"
         LKick = 0x17,
-        //% block=LongDribble
+        //% block="Long Dribble"
         LongDribble = 0x18,
-        //% block=RKick
+        //% block="Right Kick"
         RKick = 0x19,
-        //% block=PassToLeft
+        //% block="Pass To Left"
         PassToLeft = 0x1a,
-        //% block=PassItToMe
+        //% block="Pass It To Me"
         PassItToMe = 0x1b,
-        //% block=PassToRight
+        //% block="Pass To Right"
         PassToRight = 0x1c
     }
     export enum danceMotions {
-        //% block=DanceLStep
+        //% block="Dance Left Step"
         DanceLStep = 0x1e,
-        //% block=DanceFStep
+        //% block="Dance Forward Step"
         DanceFStep = 0x1f,
-        //% block=DanceRStep
+        //% block="Dance Right Step"
         DanceRStep = 0x20,
-        //% block=DanceFisnishPose
+        //% block="Dance Fisnish Pose"
         DanceFisnishPose = 0x21,
-        //% block=DanceUpDown
+        //% block="Dance Up Down"
         DanceUpDown = 0x22,
-        //% block=WiggleDance
+        //% block="Wiggle Dance"
         WiggleDance = 0x23,
-        //% block=DanceBStep
+        //% block="Dance Back Step"
         DanceBStep = 0x24,
-        //% block=DanceBow
+        //% block="Dance Bow"
         DanceBow = 0x25,
-        //% block=TwistDance
+        //% block="Twist Dance"
         TwistDance = 0x26
     }
     enum moveMotions {
@@ -111,10 +111,6 @@ namespace plenbit {
     let romADR1 = 0x56;
     let init_BLE = false;
     let init_PCA9865 = false;
-
-    //secretIncantation();
-
-
 
     function secretIncantation() {
         write8(0xFE, 0x85);//PRE_SCALE
