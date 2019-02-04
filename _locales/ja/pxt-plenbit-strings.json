@@ -56,5 +56,6 @@
   "plenbit.std_motion|block": "基本モーション %filename|の再生",
   "plenbit.servo_initial_set|block":"サーボモータ初期値設定",
   "plenbit|block": "PLEN:bit",
-  "{id:category}Plenbit": "Plenbit"
+  "{id:category}Plenbit": "Plenbit",
+  "plenbit.direction|block":"方角 (°)"
 }
