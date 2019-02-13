@@ -510,17 +510,17 @@ namespace plenbit {
     }
 
     /**
-     * This is no work.
+     * This is test code.
     **/
-    //% block="%LR|Eye LED is %onoff"
-    export function eyeLed(led_lr: LED_LR, led_onoff: LED_onoff) {
-        if (led_lr == 8) {
-            pins.digitalWritePin(DigitalPin.P8, led_onoff);
-        }
-        if (led_lr == 16) {
-            pins.digitalWritePin(DigitalPin.P16, led_onoff);
-            //23 or 15
-        }
+    //% block="Eye LED is %onoff"
+    export function eyeLed(led_onoff: LED_onoff) {
+        //if (led_lr == 8) {
+        pins.digitalWritePin(DigitalPin.P8, led_onoff);
+        //}
+        //if (led_lr == 16) {
+        pins.digitalWritePin(DigitalPin.P16, led_onoff);
+        //23 or 15
+        //}
     }
 
 }

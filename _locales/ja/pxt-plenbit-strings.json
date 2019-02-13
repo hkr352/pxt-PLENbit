@@ -1,6 +1,6 @@
 {
-  "plenbit.LED_LR.B_button_side|block":"Bボタン側",
-  "plenbit.LED_LR.A_button_side|block":"Aボタン側",
+  "plenbit.LED_LR.B_button_side|block":"B ボタン側",
+  "plenbit.LED_LR.A_button_side|block":"A ボタン側",
   "plenbit.LED_onoff.ON|block":"オン",
   "plenbit.LED_onoff.OFF|block":"オフ",
   "plenbit.stdMotions.Lstep|block":"左ステップ",
@@ -47,7 +47,7 @@
   "plenbit.Move_motion|block": "動きモーション %filename|の再生",
   "plenbit.box_motion|block": "ボックスモーション %filename|の再生",
   "plenbit.dance_motion|block": "ダンスモーション %filename|の再生",
-  "plenbit.eyeLed|block": "%LR|目のLEDを %onoff|にする",
+  "plenbit.eyeLed|block": "目のLEDを %onoff|にする",
   "plenbit.motion|block": "モーション番号を選んで %filename|再生",
   "plenbit.sensorLR|block": "センサー%num|の値を読み取る",
   "plenbit.serialread|block": "スマホからコントロールできるようにする",
