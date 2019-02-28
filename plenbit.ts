@@ -112,7 +112,7 @@ namespace plenbit {
     let init_BLE = false;
     let init_PCA9865 = false;
 
-    function secretIncantation() {
+    export function secretIncantation() {
         write8(0xFE, 0x85);//PRE_SCALE
         write8(0xFA, 0x00);//ALL_LED_ON_L
         write8(0xFB, 0x00);//ALL_LED_ON_H
@@ -428,7 +428,7 @@ namespace plenbit {
 
     export function setAngle(angle: number[], msec: number) {
         let _step = [0, 0, 0, 0, 0, 0, 0, 0];
-        let _msec = msec / Motion_Speed;//default 10; //speedy 20   Speed Adj
+        let _msec = msec / Motion_Speed;//now 15//default 10; //speedy 20   Speed Adj
         for (let _val = 0; _val < 8; _val++) {
             let _target = (SERVO_SET_INIT[_val] - angle[_val]);
             if (_target != SERVO_ANGLE[_val]) {  // Target != Present
@@ -495,7 +495,24 @@ namespace plenbit {
 
     //% block="ServoMotor_initial"
     export function servo_initial_set() {
-        setAngle([0, 0, 0, 0, 0, 0, 0, 0], 1000);
+        //setAngle([0, 0, 0, 0, 0, 0, 0, 0], 1);//Motion_Speed//num=1000
+        let s_num = 0;
+        servoWrite(s_num, SERVO_SET_INIT[s_num] / 10);
+        s_num++;
+        servoWrite(s_num, SERVO_SET_INIT[s_num] / 10);
+        s_num++;
+        servoWrite(s_num, SERVO_SET_INIT[s_num] / 10);
+        s_num++;
+        servoWrite(s_num, SERVO_SET_INIT[s_num] / 10);
+        s_num++;
+        servoWrite(s_num, SERVO_SET_INIT[s_num] / 10);
+        s_num++;
+        servoWrite(s_num, SERVO_SET_INIT[s_num] / 10);
+        s_num++;
+        servoWrite(s_num, SERVO_SET_INIT[s_num] / 10);
+        s_num++;
+        servoWrite(s_num, SERVO_SET_INIT[s_num] / 10);
+
     }
     //% block
     export function servoFree() {
