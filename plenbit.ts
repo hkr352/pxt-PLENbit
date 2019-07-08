@@ -103,13 +103,13 @@ namespace plenbit {
 
     }
 
-    export let motionSpeed = 15;
+    let motionSpeed = 15;
     let servoNum = 0x08;
     //[1000, 900, 300, 900, 800, 900, 1500, 900];good angle
     export let servoSetInit = [1000, 630, 300, 600, 240, 600, 1000, 720];
     let servoAngle = [1000, 630, 300, 600, 240, 600, 1000, 720];
-    export let romAdr1 = 0x56;
-    //let initBle = false;
+    let romAdr1 = 0x56;
+    let initBle = false;
     let initPCA9865 = false;
     loadPos();
 
@@ -162,7 +162,7 @@ namespace plenbit {
         }
     }
 
-    export function write8(addr: number, d: number) {
+    function write8(addr: number, d: number) {
         let cmd = pins.createBuffer(2);
         cmd[0] = addr;
         cmd[1] = d;
@@ -302,7 +302,7 @@ namespace plenbit {
         //}
     }
 
-    export function hexToInt(num: number) {
+    function hexToInt(num: number) {
         let i = 0;
         if (48 <= num && num <= 57) {
             i = num - 48;
@@ -314,32 +314,64 @@ namespace plenbit {
         return i;
     }
 
-    export function numToHex(num: number) {
+    function numToHex(num: number) {
         let i = "";
         if (48 <= num && num <= 57) {
             i = (num - 48).toString();
         } else if (62 <= num && num <= 77) {
             switch (num) {
-                case 62:i = ">";break;
-                case 65:i = "a";break;
-                case 66:i = "b";break;
-                case 67:i = "c";break;
-                case 68:i = "d";break;
-                case 69:i = "e";break;
-                case 70:i = "f";break;
-                case 77:i = "m";break;
-                default:i = "";
+                case 62:
+                    i = ">";
+                    break;
+                case 65:
+                    i = "a";
+                    break;
+                case 66:
+                    i = "b";
+                    break;
+                case 67:
+                    i = "c";
+                    break;
+                case 68:
+                    i = "d";
+                    break;
+                case 69:
+                    i = "e";
+                    break;
+                case 70:
+                    i = "f";
+                    break;
+                case 77:
+                    i = "m";
+                    break;
+                default:
+                    i = "";
             }
         } else if (97 <= num && num <= 102) {
             switch (num) {
-                case 97:i = "a";break;
-                case 98:i = "b";break;
-                case 99:i = "c";break;
-                case 100:i = "d";break;
-                case 101:i = "e";break;
-                case 102:i = "f";break;
-                //case 109:i = "m";break;
-                default:i = "";
+                case 97:
+                    i = "a";
+                    break;
+                case 98:
+                    i = "b";
+                    break;
+                case 99:
+                    i = "c";
+                    break;
+                case 100:
+                    i = "d";
+                    break;
+                case 101:
+                    i = "e";
+                    break;
+                case 102:
+                    i = "f";
+                    break;
+                //case 109:
+                //    i = "m";
+                //    break;
+                default:
+                    i = "";
             }
         } else {
             //i = "m" + num.toString();
@@ -352,18 +384,42 @@ namespace plenbit {
         let num = [0, 0, 0, 0];
         for (let i = 0; i < len; i++) {
             switch (str[i]) {
-                case "a":num[i] = 10;break;
-                case "b":num[i] = 11;break;
-                case "c":num[i] = 12;break;
-                case "d":num[i] = 13;break;
-                case "e":num[i] = 14;break;
-                case "f":num[i] = 15;break;
-                case "A":num[i] = 10;break;
-                case "B":num[i] = 11;break;
-                case "C":num[i] = 12;break;
-                case "D":num[i] = 13;break;
-                case "E":num[i] = 14;break;
-                case "F":num[i] = 15;break;
+                case "a":
+                    num[i] = 10;
+                    break;
+                case "b":
+                    num[i] = 11;
+                    break;
+                case "c":
+                    num[i] = 12;
+                    break;
+                case "d":
+                    num[i] = 13;
+                    break;
+                case "e":
+                    num[i] = 14;
+                    break;
+                case "f":
+                    num[i] = 15;
+                    break;
+                case "A":
+                    num[i] = 10;
+                    break;
+                case "B":
+                    num[i] = 11;
+                    break;
+                case "C":
+                    num[i] = 12;
+                    break;
+                case "D":
+                    num[i] = 13;
+                    break;
+                case "E":
+                    num[i] = 14;
+                    break;
+                case "F":
+                    num[i] = 15;
+                    break;
                 default:
                     num[i] = parseInt(str[i]);
                     break;
@@ -371,10 +427,14 @@ namespace plenbit {
         }
         let hex = 0;
         switch (len) {
-            case 4:hex = (num[len - 4] * 0x1000);
-            case 3:hex += (num[len - 3] * 0x0100);
-            case 2:hex += (num[len - 2] * 0x0010);
-            case 1:hex += (num[len - 1] * 0x0001);
+            case 4:
+                hex = (num[len - 4] * 0x1000);
+            case 3:
+                hex += (num[len - 3] * 0x0100);
+            case 2:
+                hex += (num[len - 2] * 0x0010);
+            case 1:
+                hex += (num[len - 1] * 0x0001);
         }
         return hex;
     }
@@ -399,7 +459,7 @@ namespace plenbit {
         return mf;
     }
 
-    export function weep(eepAdr: number, num: number) {
+    function weep(eepAdr: number, num: number) {
         let data = pins.createBuffer(3);
         data[0] = eepAdr >> 8;
         data[1] = eepAdr & 0xFF;
@@ -441,10 +501,10 @@ namespace plenbit {
 
         weep(servoNum * 2 + 2, adjStrTop);
         weep(servoNum * 2 + 3, adjStrDown);
-        weep(0, 1);    //write flag
+        weep(0, 1);	//write flag
     }
 
-    export function loadPos() {
+    function loadPos() {
         let readBuf = reep(0x00, 1);
         if (readBuf[0] == 0x01) {
             readBuf = reep(0x02, 16);
@@ -472,16 +532,15 @@ namespace plenbit {
         return adjustNum;
     }
 
-    // function bleInit() {
-    //     serial.redirect(SerialPin.P8, SerialPin.P12, 115200);
-    //     pins.digitalWritePin(DigitalPin.P16, 0);
-    //     initBle = true;
-    // }
+    function bleInit() {
+        serial.redirect(SerialPin.P8, SerialPin.P12, 115200);
+        pins.digitalWritePin(DigitalPin.P16, 0);
+        initBle = true;
+    }
 
-    // blockId=PLEN:bit_BLE
-    // block="enable control from smartphone"
-    // advanced=true
-    /*
+    //% blockId=PLEN:bit_BLE
+    //% block="enable control from smartphone"
+    //% advanced=true
     export function serialRead() {
         if (initBle == false) bleInit();
         pins.digitalWritePin(DigitalPin.P16, 1);
@@ -504,7 +563,7 @@ namespace plenbit {
             }
         }
         pins.digitalWritePin(DigitalPin.P16, 0);
-    }*/
+    }
 
     //% block="servo motor initial"
     export function servoInitialSet() {
