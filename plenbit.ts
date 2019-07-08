@@ -103,14 +103,22 @@ namespace plenbit {
 
     }
 
-    let motionSpeed = 15;
-    let servoNum = 0x08;
+    export let motionSpeed = 15;
     //[1000, 900, 300, 900, 800, 900, 1500, 900];good angle
     export let servoSetInit = [1000, 630, 300, 600, 240, 600, 1000, 720];
     let servoAngle = [1000, 630, 300, 600, 240, 600, 1000, 720];
     let romAdr1 = 0x56;
-    let initBle = false;
+    //let initBle = false;
     let initPCA9865 = false;
+
+    let motionData: Buffer = pins.createBuffer(64);
+    let writeF = false;
+    let _motion_adr = 0;
+    let _stage = 0;
+    let mf2 = "";
+    serial.setRxBufferSize(64)
+
+
     loadPos();
 
     export function secretIncantation() {
@@ -144,6 +152,7 @@ namespace plenbit {
     //% num.min=0 num.max=11
     //% degrees.min=0 degrees.max=180
     export function servoWrite(num: number, degrees: number) {
+        let servoNum = 0x08;
         if (initPCA9865 == false) {
             secretIncantation();
             initPCA9865 = true;
@@ -162,7 +171,7 @@ namespace plenbit {
         }
     }
 
-    function write8(addr: number, d: number) {
+    export function write8(addr: number, d: number) {
         let cmd = pins.createBuffer(2);
         cmd[0] = addr;
         cmd[1] = d;
@@ -296,13 +305,9 @@ namespace plenbit {
             }
             //basic.pause(1); //Nakutei yoi
         }
-        //for (let val = 0; val < 8; val++) {
-        //    servoAngle[val] = angle[val];
-        //    servoWrite(val, (servoAngle[val] / 10));
-        //}
     }
 
-    function hexToInt(num: number) {
+    export function hexToInt(num: number) {
         let i = 0;
         if (48 <= num && num <= 57) {
             i = num - 48;
@@ -314,64 +319,32 @@ namespace plenbit {
         return i;
     }
 
-    function numToHex(num: number) {
+    export function numToHex(num: number) {
         let i = "";
         if (48 <= num && num <= 57) {
             i = (num - 48).toString();
         } else if (62 <= num && num <= 77) {
             switch (num) {
-                case 62:
-                    i = ">";
-                    break;
-                case 65:
-                    i = "a";
-                    break;
-                case 66:
-                    i = "b";
-                    break;
-                case 67:
-                    i = "c";
-                    break;
-                case 68:
-                    i = "d";
-                    break;
-                case 69:
-                    i = "e";
-                    break;
-                case 70:
-                    i = "f";
-                    break;
-                case 77:
-                    i = "m";
-                    break;
-                default:
-                    i = "";
+                case 62: i = ">"; break;
+                case 65: i = "a"; break;
+                case 66: i = "b"; break;
+                case 67: i = "c"; break;
+                case 68: i = "d"; break;
+                case 69: i = "e"; break;
+                case 70: i = "f"; break;
+                case 77: i = "m"; break;
+                default: i = "";
             }
         } else if (97 <= num && num <= 102) {
             switch (num) {
-                case 97:
-                    i = "a";
-                    break;
-                case 98:
-                    i = "b";
-                    break;
-                case 99:
-                    i = "c";
-                    break;
-                case 100:
-                    i = "d";
-                    break;
-                case 101:
-                    i = "e";
-                    break;
-                case 102:
-                    i = "f";
-                    break;
-                //case 109:
-                //    i = "m";
-                //    break;
-                default:
-                    i = "";
+                case 97: i = "a"; break;
+                case 98: i = "b"; break;
+                case 99: i = "c"; break;
+                case 100: i = "d"; break;
+                case 101: i = "e"; break;
+                case 102: i = "f"; break;
+                //case 109: i = "m"; break;
+                default: i = "";
             }
         } else {
             //i = "m" + num.toString();
@@ -384,42 +357,18 @@ namespace plenbit {
         let num = [0, 0, 0, 0];
         for (let i = 0; i < len; i++) {
             switch (str[i]) {
-                case "a":
-                    num[i] = 10;
-                    break;
-                case "b":
-                    num[i] = 11;
-                    break;
-                case "c":
-                    num[i] = 12;
-                    break;
-                case "d":
-                    num[i] = 13;
-                    break;
-                case "e":
-                    num[i] = 14;
-                    break;
-                case "f":
-                    num[i] = 15;
-                    break;
-                case "A":
-                    num[i] = 10;
-                    break;
-                case "B":
-                    num[i] = 11;
-                    break;
-                case "C":
-                    num[i] = 12;
-                    break;
-                case "D":
-                    num[i] = 13;
-                    break;
-                case "E":
-                    num[i] = 14;
-                    break;
-                case "F":
-                    num[i] = 15;
-                    break;
+                case "a": num[i] = 10; break;
+                case "b": num[i] = 11; break;
+                case "c": num[i] = 12; break;
+                case "d": num[i] = 13; break;
+                case "e": num[i] = 14; break;
+                case "f": num[i] = 15; break;
+                case "A": num[i] = 10; break;
+                case "B": num[i] = 11; break;
+                case "C": num[i] = 12; break;
+                case "D": num[i] = 13; break;
+                case "E": num[i] = 14; break;
+                case "F": num[i] = 15; break;
                 default:
                     num[i] = parseInt(str[i]);
                     break;
@@ -427,14 +376,10 @@ namespace plenbit {
         }
         let hex = 0;
         switch (len) {
-            case 4:
-                hex = (num[len - 4] * 0x1000);
-            case 3:
-                hex += (num[len - 3] * 0x0100);
-            case 2:
-                hex += (num[len - 2] * 0x0010);
-            case 1:
-                hex += (num[len - 1] * 0x0001);
+            case 4: hex = (num[len - 4] * 0x1000);
+            case 3: hex += (num[len - 3] * 0x0100);
+            case 2: hex += (num[len - 2] * 0x0010);
+            case 1: hex += (num[len - 1] * 0x0001);
         }
         return hex;
     }
@@ -459,7 +404,7 @@ namespace plenbit {
         return mf;
     }
 
-    function weep(eepAdr: number, num: number) {
+    export function weep(eepAdr: number, num: number) {
         let data = pins.createBuffer(3);
         data[0] = eepAdr >> 8;
         data[1] = eepAdr & 0xFF;
@@ -504,7 +449,7 @@ namespace plenbit {
         weep(0, 1);	//write flag
     }
 
-    function loadPos() {
+    export function loadPos() {
         let readBuf = reep(0x00, 1);
         if (readBuf[0] == 0x01) {
             readBuf = reep(0x02, 16);
@@ -532,38 +477,38 @@ namespace plenbit {
         return adjustNum;
     }
 
-    function bleInit() {
-        serial.redirect(SerialPin.P8, SerialPin.P12, 115200);
-        pins.digitalWritePin(DigitalPin.P16, 0);
-        initBle = true;
-    }
+    // function bleInit() {
+    //     serial.redirect(SerialPin.P8, SerialPin.P12, 115200);
+    //     pins.digitalWritePin(DigitalPin.P16, 0);
+    //     initBle = true;
+    // }
 
-    //% blockId=PLEN:bit_BLE
-    //% block="enable control from smartphone"
-    //% advanced=true
-    export function serialRead() {
-        if (initBle == false) bleInit();
-        pins.digitalWritePin(DigitalPin.P16, 1);
-        while (1) {
-            let buf = serial.readString();
-            if ((buf[0] != "$") && (buf[0] != "#")) {
-                break;
-            }
-            let bufB = buf[1] + buf[2];
-            if (bufB == "PM") {
-                bufB = buf[3] + buf[4];
-                //basic.showString(bufB);
-                motion(parseIntM(bufB));
-                break;
-            } else if (bufB == "SM") {
-                break;
-            } else {
-                //display.show("b")
-                break;
-            }
-        }
-        pins.digitalWritePin(DigitalPin.P16, 0);
-    }
+    // blockId=PLEN:bit_BLE
+    // block="enable control from smartphone"
+    // advanced=true
+    // export function serialRead() {
+    //     if (initBle == false) bleInit();
+    //     pins.digitalWritePin(DigitalPin.P16, 1);
+    //     while (1) {
+    //         let buf = serial.readString();
+    //         if ((buf[0] != "$") && (buf[0] != "#")) {
+    //             break;
+    //         }
+    //         let bufB = buf[1] + buf[2];
+    //         if (bufB == "PM") {
+    //             bufB = buf[3] + buf[4];
+    //             //basic.showString(bufB);
+    //             motion(parseIntM(bufB));
+    //             break;
+    //         } else if (bufB == "SM") {
+    //             break;
+    //         } else {
+    //             //display.show("b")
+    //             break;
+    //         }
+    //     }
+    //     pins.digitalWritePin(DigitalPin.P16, 0);
+    // }
 
     //% block="servo motor initial"
     export function servoInitialSet() {
@@ -590,4 +535,212 @@ namespace plenbit {
         pins.digitalWritePin(DigitalPin.P8, ledOnOff);
         pins.digitalWritePin(DigitalPin.P16, ledOnOff);
     }
+
+
+    export function checkEprom(eepAdr: number) {
+
+        let adrrr = 0x32 + 860 * eepAdr    // 0x00
+        let _n = reep(adrrr, 430);
+        let mf = "";    //=null ?
+        let neko = _n.length();
+        serial.writeString("len:");
+        serial.writeNumber(neko);
+        mf = _n.toString();
+        serial.writeString(mf);
+
+        adrrr += 430
+        _n = reep(adrrr, 430);
+        mf = "";    //=null ?
+        neko = _n.length();
+        serial.writeString("len:");
+        serial.writeNumber(neko);
+        mf = _n.toString();
+        serial.writeString(mf);
+
+        basic.pause(300);
+    }
+
+    function ack() {
+        let data3 = pins.createBuffer(2);
+        data3[0] = 46
+        serial.writeBuffer(data3)
+    }
+
+    export function weep_page(eepAdr: number, value: Buffer) {
+        let dataFloat = pins.createBuffer(45);
+        let data = pins.createBuffer(45);
+
+        //serial.writeString(",addr:");
+        //serial.writeNumber(eepAdr);//debug
+
+        let counter = eepAdr;
+        data[0] = eepAdr >> 8;//msb
+        data[1] = eepAdr & 0xFF;//lsb
+        let float_flag = false;
+        let bufLength = value.length;
+        let dataAddr = 2;
+        let dataFloatAddr = 0;
+
+        for (let i = 0; i < bufLength; i++) {
+            let neko = counter % 256;
+            let thisBuf = value.slice(i, 1);
+            if (float_flag) {
+                dataFloat.write(dataFloatAddr, thisBuf);
+                dataFloatAddr++;
+            } else if (neko != 0) {
+                data.write(dataAddr, thisBuf);
+            } else {
+                //print("next page",counter)
+                float_flag = true;
+                //serial.writeString(",addr2:");
+                //serial.writeNumber(counter);
+                dataFloat[0] = counter >> 8;
+                dataFloat[1] = counter & 0xFF;
+                dataFloat[2] = thisBuf[0];
+                dataFloatAddr = 3;
+                //dataFloat.write(dataAddr, thisBuf);
+
+            }
+            counter += 1;
+            dataAddr += 1;
+        }
+        let mf1 = ""
+        let serilLen1 = data.length()
+        for (let i = 0; i < serilLen1; i++) {
+            let num = data.getNumber(NumberFormat.Int8LE, i);
+            mf1 += numToHex(num);
+        }
+        //serial.writeString(",d1:");
+        serial.writeString(mf1);//debug
+
+        //basic.pause(20);
+
+        if (float_flag) {
+            //print("page error")
+            //print(dataFloat)
+            //serial.writeString("p");
+
+            let serilLen = dataFloat.length()
+            let mf = ""
+            for (let i = 0; i < serilLen; i++) {
+                let num = dataFloat.getNumber(NumberFormat.Int8LE, i);
+                mf += numToHex(num);
+            }
+            serial.writeString(mf);//debug
+
+
+            pins.i2cWriteBuffer(romAdr1, data, true);
+            basic.pause(20);
+            pins.i2cWriteBuffer(romAdr1, dataFloat, false);
+            basic.pause(20);
+        } else {
+            pins.i2cWriteBuffer(romAdr1, data, false);
+            basic.pause(20);
+        }
+
+        let mf = "";
+        let readBuf = reep(eepAdr, 43);
+        let serilLen = readBuf.length()
+        for (let j = 0; j < serilLen; j++) {
+            let num = readBuf.getNumber(NumberFormat.Int8LE, j);
+            mf += numToHex(num);
+        }
+        //serial.writeString(",read:");
+        //serial.writeString(mf);//debug
+
+        return 0;
+    }
+    export function motionWrite() {
+        switch (_stage) {
+            case 0:
+                led.plot(0, 4);
+                let _nHead: Buffer = serial.readBuffer(3);
+                mf2 = _nHead.toString();
+
+                if (writeF == true) {
+                    if (mf2 == "end") {
+                        serial.writeString(";");
+                        _stage = 0;
+                        writeF = false;
+                        _motion_adr = 0;
+                    } else {
+                        _stage = 2;
+                        if (mf2 == ">MF") {
+                            led.plot(0, 1);
+                            _stage = 2;
+                            motionData.write(0, _nHead);
+                            //_motion_adr += 3;
+                        } else {
+                            serial.writeString("f2");
+                            _stage = 0;
+                        }
+                    }
+                } else {
+                    if (mf2 == ">MF") {
+                        _stage = 1;
+                        motionData.write(0, _nHead);
+                    } else {
+                        serial.writeString("f1");
+                        _stage = 0;
+
+                    }
+                }
+                break;
+
+            case 1:
+                led.plot(1, 4);
+                let _n_slot = serial.readBuffer(2);
+                mf2 = _n_slot.toString();
+                let _n_adr = parseIntM(mf2[0] + mf2[1]);
+                //serial.writeNumber(_n_adr);
+                //basic.showNumber(_n_adr);
+                _motion_adr = 0x32 + 860 * _n_adr;
+                //serial.writeNumber(_motion_adr);
+                //plenMotion.weep_page(_motion_adr, _nHead);
+                //_motion_adr += 3;//head
+                motionData.write(3, _n_slot);
+            //plenMotion.weep_page(_motion_adr, _n_slot);
+            //_motion_adr += 2;//flame//time
+            case 2:
+                led.plot(2, 4);
+                //ack();
+                if (writeF == true) {
+                    led.plot(0, 0);
+                    let mBuf1: Buffer = serial.readBuffer(40);//3+2+38
+                    //led.plot(1, 0);
+                    ack();
+                    //led.plot(2, 0);
+                    motionData.write(3, mBuf1);
+                    //led.plot(3, 0);
+                    weep_page(_motion_adr, motionData);
+                    _motion_adr += 43;
+                } else {
+                    led.plot(1, 2);
+                    let mBuf12: Buffer = serial.readBuffer(38);//3+2+38
+                    ack();
+                    motionData.write(5, mBuf12);
+                    weep_page(_motion_adr, motionData);
+                    _motion_adr += 43;//38;
+                    //_motion_adr -3 ???????????
+                }
+                led.plot(2, 3);
+
+                // let mBuf1: Buffer = serial.readBuffer(18);//43=3+2+18+10+10
+                // ack();
+                // plenMotion.weep_page(_motion_adr, mBuf1);
+                // _motion_adr += 18;
+                led.plot(2, 2);
+                // let mBuf2: Buffer = serial.readBuffer(10);
+                // plenMotion.weep_page(_motion_adr, mBuf2);
+                // _motion_adr += 10;
+                // led.plot(2, 1);
+                // let mBuf3: Buffer = serial.readBuffer(10);
+                // ack();
+                // plenMotion.weep_page(_motion_adr, mBuf3);
+                _stage = 0;
+                writeF = true;
+                basic.clearScreen();
+        }
+    }
+
 }
