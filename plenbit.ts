@@ -57,7 +57,11 @@ namespace plenbit {
         PassaBox = 0x0f,
         ThrowaBox = 0x10,
         PutDownHigh = 0x11,
-        PutDownLow = 0x12
+        PutDownLow = 0x12,
+        CarryForward = 0x2A,
+        CarryLTurn = 0x2B,
+        CarryRTurn = 0x2c,
+        CarryBack = 0x2d
     }
     export enum SocMotions {
         //% block="Defense Left Step"
@@ -103,23 +107,22 @@ namespace plenbit {
 
     }
 
-    export let motionSpeed = 15;
+    export let motionSpeed = 20;
     //[1000, 900, 300, 900, 800, 900, 1500, 900];good angle
     export let servoSetInit = [1000, 630, 300, 600, 240, 600, 1000, 720];
     let servoAngle = [1000, 630, 300, 600, 240, 600, 1000, 720];
     let romAdr1 = 0x56;
-    //let initBle = false;
+    let initBle = false;
     let initPCA9865 = false;
 
-    let motionData: Buffer = pins.createBuffer(64);
-    let writeF = false;
-    let _motion_adr = 0;
-    let _stage = 0;
-    let mf2 = "";
-    serial.setRxBufferSize(64)
-
-
     loadPos();
+    eyeLed(LedOnOff.On);
+
+    //% block
+    //% advanced=true
+    export function changeMotionSpeed(speed: number) {
+        motionSpeed = speed
+    }
 
     export function secretIncantation() {
         write8(0xFE, 0x85);//PRE_SCALE
@@ -189,8 +192,9 @@ namespace plenbit {
         motion(fileName);
     }
 
-    // blockId=PLEN:bit_motion_box
-    // block="play box motion %fileName"
+    //% blockId=PLEN:bit_motion_box
+    //% block="play box motion %fileName"
+    //% advanced=true
     export function boxMotion(fileName: BoxMotions) {
         motion(fileName);
     }
@@ -446,7 +450,7 @@ namespace plenbit {
 
         weep(servoNum * 2 + 2, adjStrTop);
         weep(servoNum * 2 + 3, adjStrDown);
-        weep(0, 1);	//write flag
+        weep(0, 1);    //write flag
     }
 
     export function loadPos() {
@@ -477,38 +481,38 @@ namespace plenbit {
         return adjustNum;
     }
 
-    // function bleInit() {
-    //     serial.redirect(SerialPin.P8, SerialPin.P12, 115200);
-    //     pins.digitalWritePin(DigitalPin.P16, 0);
-    //     initBle = true;
-    // }
+    function bleInit() {
+        serial.redirect(SerialPin.P8, SerialPin.P12, 115200);
+        pins.digitalWritePin(DigitalPin.P16, 0);
+        initBle = true;
+    }
 
-    // blockId=PLEN:bit_BLE
-    // block="enable control from smartphone"
-    // advanced=true
-    // export function serialRead() {
-    //     if (initBle == false) bleInit();
-    //     pins.digitalWritePin(DigitalPin.P16, 1);
-    //     while (1) {
-    //         let buf = serial.readString();
-    //         if ((buf[0] != "$") && (buf[0] != "#")) {
-    //             break;
-    //         }
-    //         let bufB = buf[1] + buf[2];
-    //         if (bufB == "PM") {
-    //             bufB = buf[3] + buf[4];
-    //             //basic.showString(bufB);
-    //             motion(parseIntM(bufB));
-    //             break;
-    //         } else if (bufB == "SM") {
-    //             break;
-    //         } else {
-    //             //display.show("b")
-    //             break;
-    //         }
-    //     }
-    //     pins.digitalWritePin(DigitalPin.P16, 0);
-    // }
+    //% blockId=PLEN:bit_BLE
+    //% block="enable control from smartphone"
+    //% advanced=true
+    export function serialRead() {
+        if (initBle == false) bleInit();
+        pins.digitalWritePin(DigitalPin.P16, 1);
+        while (1) {
+            let buf = serial.readString();
+            if ((buf[0] != "$") && (buf[0] != "#")) {
+                break;
+            }
+            let bufB = buf[1] + buf[2];
+            if (bufB == "PM") {
+                bufB = buf[3] + buf[4];
+                //basic.showString(bufB);
+                motion(parseIntM(bufB));
+                break;
+            } else if (bufB == "SM") {
+                break;
+            } else {
+                //display.show("b")
+                break;
+            }
+        }
+        pins.digitalWritePin(DigitalPin.P16, 0);
+    }
 
     //% block="servo motor initial"
     export function servoInitialSet() {
@@ -536,48 +540,38 @@ namespace plenbit {
         pins.digitalWritePin(DigitalPin.P16, ledOnOff);
     }
 
-
+    //% block
+    //% advanced=true
     export function checkEprom(eepAdr: number) {
+        //43 * 20 = 860
+        let adrrr = 0x32 + 860 * eepAdr;    // 0x00
+        let mf = "";
 
-        let adrrr = 0x32 + 860 * eepAdr    // 0x00
-        let _n = reep(adrrr, 430);
-        let mf = "";    //=null ?
-        let neko = _n.length();
-        serial.writeString("len:");
-        serial.writeNumber(neko);
-        mf = _n.toString();
-        serial.writeString(mf);
-
-        adrrr += 430
-        _n = reep(adrrr, 430);
-        mf = "";    //=null ?
-        neko = _n.length();
-        serial.writeString("len:");
-        serial.writeNumber(neko);
-        mf = _n.toString();
-        serial.writeString(mf);
-
+        for (let i = 0; i < 20; i++) {
+            let _n = plenbit.reep(adrrr, 43);
+            mf = plenbit.bufToStr(_n);
+            serial.writeString(mf);
+            serial.writeString("\r\n");
+            adrrr += 43;
+        }
         basic.pause(300);
     }
 
     function ack() {
-        let data3 = pins.createBuffer(2);
-        data3[0] = 46
-        serial.writeBuffer(data3)
+        let data = pins.createBuffer(2);
+        data[0] = 46;
+        serial.writeBuffer(data);
     }
 
-    export function weep_page(eepAdr: number, value: Buffer) {
+
+    export function weep_page(eepAdr: number, value: Buffer, valueLengh: number) {
         let dataFloat = pins.createBuffer(45);
         let data = pins.createBuffer(45);
-
-        //serial.writeString(",addr:");
-        //serial.writeNumber(eepAdr);//debug
-
         let counter = eepAdr;
         data[0] = eepAdr >> 8;//msb
         data[1] = eepAdr & 0xFF;//lsb
         let float_flag = false;
-        let bufLength = value.length;
+        let bufLength = valueLengh;//value.length;//bufferの型の長さしか取れない
         let dataAddr = 2;
         let dataFloatAddr = 0;
 
@@ -585,161 +579,160 @@ namespace plenbit {
             let neko = counter % 256;
             let thisBuf = value.slice(i, 1);
             if (float_flag) {
+                float_flag = true;
                 dataFloat.write(dataFloatAddr, thisBuf);
                 dataFloatAddr++;
             } else if (neko != 0) {
                 data.write(dataAddr, thisBuf);
             } else {
-                //print("next page",counter)
+                // copy data
+                let dataSuper = pins.createBuffer(i + 2);
+                dataSuper.write(0, data);
+                pins.i2cWriteBuffer(romAdr1, dataSuper, false);
+                //serial.writeString("DS:");//debug
+                //serial.writeString(plenbit.bufToStr(dataSuper));//debug
+                basic.pause(20);
+
+                // over page 
                 float_flag = true;
-                //serial.writeString(",addr2:");
-                //serial.writeNumber(counter);
                 dataFloat[0] = counter >> 8;
                 dataFloat[1] = counter & 0xFF;
                 dataFloat[2] = thisBuf[0];
                 dataFloatAddr = 3;
-                //dataFloat.write(dataAddr, thisBuf);
-
             }
             counter += 1;
             dataAddr += 1;
         }
-        let mf1 = ""
-        let serilLen1 = data.length()
-        for (let i = 0; i < serilLen1; i++) {
-            let num = data.getNumber(NumberFormat.Int8LE, i);
-            mf1 += numToHex(num);
-        }
-        //serial.writeString(",d1:");
-        serial.writeString(mf1);//debug
 
-        //basic.pause(20);
+
+
+        //未解決ゾーン（たぶん解決済）
+        //1.bufferの長さに精確性が皆無だった
+        //関数に入るときのbufferの空データのせいでlengthが狂う
+        //2.12cWrite()のバッファーも文字数と合わせる必要がある。（2回書き込む場合）
 
         if (float_flag) {
-            //print("page error")
-            //print(dataFloat)
-            //serial.writeString("p");
-
-            let serilLen = dataFloat.length()
-            let mf = ""
-            for (let i = 0; i < serilLen; i++) {
-                let num = dataFloat.getNumber(NumberFormat.Int8LE, i);
-                mf += numToHex(num);
-            }
-            serial.writeString(mf);//debug
-
-
-            pins.i2cWriteBuffer(romAdr1, data, true);
-            basic.pause(20);
             pins.i2cWriteBuffer(romAdr1, dataFloat, false);
-            basic.pause(20);
+            //serial.writeString(":D2:");//debug
+            //serial.writeString(plenbit.bufToStr(dataFloat));//debug
         } else {
             pins.i2cWriteBuffer(romAdr1, data, false);
-            basic.pause(20);
+            //serial.writeString("D1:");//debug
+            //serial.writeString(plenbit.bufToStr(data));//debug
         }
-
-        let mf = "";
-        let readBuf = reep(eepAdr, 43);
-        let serilLen = readBuf.length()
-        for (let j = 0; j < serilLen; j++) {
-            let num = readBuf.getNumber(NumberFormat.Int8LE, j);
-            mf += numToHex(num);
-        }
-        //serial.writeString(",read:");
-        //serial.writeString(mf);//debug
+        basic.pause(20);
 
         return 0;
     }
-    export function motionWrite() {
-        switch (_stage) {
-            case 0:
-                led.plot(0, 4);
-                let _nHead: Buffer = serial.readBuffer(3);
-                mf2 = _nHead.toString();
 
-                if (writeF == true) {
-                    if (mf2 == "end") {
-                        serial.writeString(";");
-                        _stage = 0;
-                        writeF = false;
-                        _motion_adr = 0;
-                    } else {
-                        _stage = 2;
-                        if (mf2 == ">MF") {
-                            led.plot(0, 1);
-                            _stage = 2;
-                            motionData.write(0, _nHead);
-                            //_motion_adr += 3;
-                        } else {
-                            serial.writeString("f2");
+    //% block
+    //% advanced=true
+    export function motionWrite() {
+        serial.setRxBufferSize(64)
+        let motionData: Buffer = pins.createBuffer(64);
+        let writeF = false;
+        let _motion_adr = 0;
+        let _stage = 0;
+        let nextMotionAdr = 0;
+        let longloop = true;
+
+        while (longloop) {
+            let mf = "";
+            switch (_stage) {
+                case 0:
+                    led.plot(0, 4);
+                    let _nHead: Buffer = serial.readBuffer(3);
+                    mf = _nHead.toString();
+
+                    if (writeF == true) {
+
+                        if (mf == "end") {
+                            led.plot(4, 0);
+                            if (nextMotionAdr > _motion_adr) {
+                                plenbit.weep(_motion_adr, 0xff);//FF書込み
+                            }
+                            serial.writeString(";");
                             _stage = 0;
+                            writeF = false;
+                            _motion_adr = 0;
+                            longloop = false;
+                            basic.clearScreen();
+                        } else {
+                            led.plot(4, 1);
+                            _stage = 2;
+                            if (mf == ">MF") {
+                                led.plot(0, 1);
+                                _stage = 2;
+                                motionData.write(0, _nHead);
+                                //_motion_adr += 3;
+                            } else {
+                                serial.writeString("f2");
+                                _stage = 0;
+                                longloop = false;
+                                basic.clearScreen();
+                            }
+                        }
+                    } else {
+                        if (mf == ">MF") {
+                            led.plot(4, 2);
+                            _stage = 1;
+                            motionData.write(0, _nHead);
+                        } else if (mf == ">DB") {
+                            led.plot(4, 3);
+                            let _nDB: Buffer = serial.readBuffer(2);
+                            let _n = plenbit.bufToStr(_nDB);
+                            checkEprom(plenbit.parseIntM(_n));
+                            serial.writeString(";");
+                        } else {
+                            led.plot(4, 4);
+                            serial.writeString("f1");
+                            _stage = 0;
+                            longloop = false;
+                            basic.clearScreen();
                         }
                     }
-                } else {
-                    if (mf2 == ">MF") {
-                        _stage = 1;
-                        motionData.write(0, _nHead);
+                    break;
+
+                case 1:
+                    led.plot(1, 4);
+                    let _n_slot = serial.readBuffer(2);
+                    mf = _n_slot.toString();
+                    let _n_adr = plenbit.parseIntM(mf[0] + mf[1]);
+                    //serial.writeNumber(_n_adr);
+                    //basic.showNumber(_n_adr);
+                    _motion_adr = 0x32 + 860 * _n_adr;
+                    nextMotionAdr = _motion_adr + 860;
+                    //serial.writeNumber(_motion_adr);
+                    //plenMotion.weep_page(_motion_adr, _nHead);
+                    //_motion_adr += 3;//head
+                    motionData.write(3, _n_slot);
+                //plenMotion.weep_page(_motion_adr, _n_slot);
+                //_motion_adr += 2;//flame//time
+                case 2:
+                    led.plot(2, 4);
+                    if (writeF == true) {
+                        led.plot(0, 0);
+                        let mBuf1: Buffer = serial.readBuffer(40);//3+2+38
+                        //led.plot(1, 0);
+                        ack();
+                        //led.plot(2, 0);
+                        motionData.write(3, mBuf1);
+                        //led.plot(3, 0);
+                        plenbit.weep_page(_motion_adr, motionData, 43);
+                        _motion_adr += 43;
                     } else {
-                        serial.writeString("f1");
-                        _stage = 0;
-
+                        led.plot(1, 2);
+                        let mBuf1: Buffer = serial.readBuffer(38);//3+2+38
+                        ack();
+                        motionData.write(5, mBuf1);
+                        plenbit.weep_page(_motion_adr, motionData, 43);
+                        _motion_adr += 43;//38;
                     }
-                }
-                break;
-
-            case 1:
-                led.plot(1, 4);
-                let _n_slot = serial.readBuffer(2);
-                mf2 = _n_slot.toString();
-                let _n_adr = parseIntM(mf2[0] + mf2[1]);
-                //serial.writeNumber(_n_adr);
-                //basic.showNumber(_n_adr);
-                _motion_adr = 0x32 + 860 * _n_adr;
-                //serial.writeNumber(_motion_adr);
-                //plenMotion.weep_page(_motion_adr, _nHead);
-                //_motion_adr += 3;//head
-                motionData.write(3, _n_slot);
-            //plenMotion.weep_page(_motion_adr, _n_slot);
-            //_motion_adr += 2;//flame//time
-            case 2:
-                led.plot(2, 4);
-                //ack();
-                if (writeF == true) {
-                    led.plot(0, 0);
-                    let mBuf1: Buffer = serial.readBuffer(40);//3+2+38
-                    //led.plot(1, 0);
-                    ack();
-                    //led.plot(2, 0);
-                    motionData.write(3, mBuf1);
-                    //led.plot(3, 0);
-                    weep_page(_motion_adr, motionData);
-                    _motion_adr += 43;
-                } else {
-                    led.plot(1, 2);
-                    let mBuf12: Buffer = serial.readBuffer(38);//3+2+38
-                    ack();
-                    motionData.write(5, mBuf12);
-                    weep_page(_motion_adr, motionData);
-                    _motion_adr += 43;//38;
-                    //_motion_adr -3 ???????????
-                }
-                led.plot(2, 3);
-
-                // let mBuf1: Buffer = serial.readBuffer(18);//43=3+2+18+10+10
-                // ack();
-                // plenMotion.weep_page(_motion_adr, mBuf1);
-                // _motion_adr += 18;
-                led.plot(2, 2);
-                // let mBuf2: Buffer = serial.readBuffer(10);
-                // plenMotion.weep_page(_motion_adr, mBuf2);
-                // _motion_adr += 10;
-                // led.plot(2, 1);
-                // let mBuf3: Buffer = serial.readBuffer(10);
-                // ack();
-                // plenMotion.weep_page(_motion_adr, mBuf3);
-                _stage = 0;
-                writeF = true;
-                basic.clearScreen();
+                    led.plot(2, 2);
+                    _stage = 0;
+                    writeF = true;
+                    basic.clearScreen();
+            }
         }
     }
 
