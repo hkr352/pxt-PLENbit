@@ -4,14 +4,15 @@
     "description": "",
     "dependencies": {
         "core": "*",
-        "radio": "*"
     },
     "files": [
         "README.md",
         "main.ts",
         "plenbit.ts",
         "_locales/ja/pxt-plenbit-strings.json",
-        "_locales/ja/pxt-plenbit-jsdoc-strings.json"
+        "_locales/ja/pxt-plenbit-jsdoc-strings.json",
+        "custom.cpp",
+        "custom.h"
     ],
     "testFiles": [
         "test.ts"
