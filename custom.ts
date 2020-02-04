@@ -2,7 +2,7 @@
 namespace custom {
     /**
     *    test neko function
-    */    //% weight=30 blockId="neko_moisture" block="aho2 %pin"
+    */    //% weight=30 blockId="neko_moisture" block="neko %pin"
     export function nekoneko(pin: number): number {
         let num = pin;
         return neko(num);

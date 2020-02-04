@@ -2,12 +2,7 @@
 #include <cstdint>
 #include <math.h>
 
-//  //
-//  #include "MicroBit.h"
-//  MicroBit uBit;
-
 using namespace pxt;
-
 
 namespace custom {
     /*
