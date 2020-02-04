@@ -10,8 +10,11 @@ using namespace pxt;
 
 
 namespace custom {
+    /*
+    * nekodayo
+    */
     //%
-    int16_t neko(int16_t i){
-        return 1+1+i;
+    int16_t neko(int16_t num){
+        return 1+num;
     }
 }
