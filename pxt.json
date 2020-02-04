@@ -3,7 +3,7 @@
     "version": "0.0.8",
     "description": "plenbit",
     "dependencies": {
-        "core": "*",
+        "core": "*"
     },
     "files": [
         "README.md",
