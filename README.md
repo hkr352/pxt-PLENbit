@@ -31,4 +31,6 @@ MIT
 ## Supported targets
 
 * for PXT/microbit
+```package
 plenbit=github:hkr352/pxt-PLENbit
+```
