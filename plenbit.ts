@@ -114,7 +114,6 @@ namespace plenbit {
     let romAdr1 = 0x56;
     let initBle = false;
     let initPCA9865 = false;
-
     loadPos();
     eyeLed(LedOnOff.On);
 
