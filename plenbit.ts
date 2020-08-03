@@ -291,8 +291,9 @@ namespace plenbit {
         }
     }
 
+
     //% blockId=PLEN:bit_motion_flame
-    //% block="play motion number %fileName"
+    //% block="play motion number %fileName number%flameNum"
     //% fileName.min=0 fileName.max=73
     //% advanced=true
     export function motion_flame(fileName: number, flameNum: number) {
@@ -303,13 +304,15 @@ namespace plenbit {
         let error = 0;
         //while (1) {
         if (error == 1) {
-            break;
+            //break;
+            return;
         }
 
         let mBuf = reep(readAdr, listLen);
         readAdr += listLen;
         if (mBuf[0] == 0xff) {
-            break;
+            //break;
+            return;
         }
 
         let mf = "";    //=null ?
