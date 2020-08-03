@@ -14,12 +14,35 @@ basic.forever(function () {
 
 })
 input.onButtonPressed(Button.A, function () {
-    //plenbit.dance_motion(plenbit.danceMotions.DanceLStep)
-    plenbit.stdMotion(plenbit.StdMotions.ArmPataPata)
+    while(1){
+        if(plenbit.sensorLR(plenbit.LedLr.BButtonSide) >= 700){
+            plenbit.walk(false);
+        }else{
+            plenbit.walk(true);
+        }
+        if(input.buttonIsPressed(Button.B)){
+            break;
+        }
+    }
+    // //plenbit.dance_motion(plenbit.danceMotions.DanceLStep)
+    // //plenbit.stdMotion(plenbit.StdMotions.ArmPataPata)
+    // plenbit.motion_flame(plenbit.StdMotions.WalkForward, 0);
+    // plenbit.motion_flame(plenbit.StdMotions.WalkForward, 1);
+    // for (let i = 0; i <= 3; i++) {
+    //     plenbit.motion_flame(plenbit.StdMotions.WalkForward, 2);
+    //     plenbit.motion_flame(plenbit.StdMotions.WalkForward, 3);
+    //     plenbit.motion_flame(plenbit.StdMotions.WalkForward, 4);
+    //     plenbit.motion_flame(plenbit.StdMotions.WalkForward, 5);
+    //     plenbit.motion_flame(plenbit.StdMotions.WalkForward, 6);
+    //     plenbit.motion_flame(plenbit.StdMotions.WalkForward, 7);
+    // }
+    // plenbit.motion_flame(plenbit.StdMotions.WalkForward, 8);
+    // plenbit.motion_flame(plenbit.StdMotions.WalkForward, 9);
 
 })
 input.onButtonPressed(Button.B, function () {
-    plenbit.servoFree();
+    //plenbit.servoFree();
+    plenbit.motion(plenbit.StdMotions.WalkForward);
 })
 
 /*

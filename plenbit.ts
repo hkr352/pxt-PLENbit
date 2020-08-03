@@ -291,6 +291,123 @@ namespace plenbit {
         }
     }
 
+    //% blockId=PLEN:bit_motion_flame
+    //% block="play motion number %fileName"
+    //% fileName.min=0 fileName.max=73
+    //% advanced=true
+    export function motion_flame(fileName: number, flameNum: number) {
+        let data = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        let command = ">";//0x3e
+        let listLen = 43;
+        let readAdr =  0x32 + 860 * fileName + flameNum * listLen;
+        let error = 0;
+        //while (1) {
+        if (error == 1) {
+            break;
+        }
+
+        let mBuf = reep(readAdr, listLen);
+        readAdr += listLen;
+        if (mBuf[0] == 0xff) {
+            break;
+        }
+
+        let mf = "";    //=null ?
+        for (let i = 0; i < listLen; i++) {
+            let num = mBuf.getNumber(NumberFormat.Int8LE, i);
+            mf += numToHex(num);
+        }
+        let listNum = 0;
+        while (listLen > listNum) {
+            if (command != mf[listNum]) {
+                listNum += 1;
+                continue;
+            } //serial.writeString(",>OK")
+            listNum += 1; // >
+
+            if ("mf" != (mf[listNum] + mf[listNum + 1])) {
+                //if (0x4d != (mf[listNum])) {
+                listNum += 2;
+                continue;
+            } //serial.writeString(",mfOK")
+            listNum += 2; // MF
+
+            //if (fileName != int((_mf[listNum] + _mf[listNum + 1]), 16)) {
+            if (fileName != parseIntM(mf[listNum] + mf[listNum + 1])) {
+                error = 1;
+                break;
+            }
+            //serial.writeString(",fileOK")
+            listNum += 4;// slot,flame
+
+            let times = (mf[listNum] + mf[listNum + 1] + mf[listNum + 2] + mf[listNum + 3])
+            let time = (parseIntM(times));
+            listNum += 4;
+            let val = 0;
+            while (1) {
+                if ((listLen < (listNum + 4)) || (command == mf[listNum]) || (24 < val)) {
+                    setAngle(data, time);
+                    break;
+                }
+                let num = (mf[listNum] + mf[listNum + 1] + mf[listNum + 2] + mf[listNum + 3]);
+                let numHex = (parseIntM(num));
+                if (numHex >= 0x7fff) {
+                    numHex = numHex - 0x10000;
+                } else {
+                    numHex = numHex & 0xffff;
+                }
+                data[val] = numHex;
+                //serial.writeNumber(data[val]);
+                //serial.writeString(",")
+                val = val + 1;
+                listNum += 4;
+            }
+        }
+        //}
+    }
+
+    
+    let modeNum=0;
+    // blockId=PLEN:bit_walk
+    // block="walk %mode"
+    export function walk(mode: boolean){
+        
+        if(mode == true){
+            if(modeNum == 0){
+                modeNum = 0;
+            }else if(modeNum == 100){
+                modeNum = 0;
+            }
+        }else{
+            if(modeNum == 1){
+                modeNum = 2;
+            }else{
+                modeNum = 100;
+            }
+        }
+        switch(modeNum){
+            case 0:
+                motion_flame(StdMotions.WalkForward, 0);
+                motion_flame(StdMotions.WalkForward, 1);
+                modeNum = 1;
+                break;
+            case 1:
+                motion_flame(StdMotions.WalkForward, 2);
+                motion_flame(StdMotions.WalkForward, 3);
+                motion_flame(StdMotions.WalkForward, 4);
+                motion_flame(StdMotions.WalkForward, 5);
+                motion_flame(StdMotions.WalkForward, 6);
+                motion_flame(StdMotions.WalkForward, 7);
+                break;
+            case 2:
+                motion_flame(StdMotions.WalkForward, 8);
+                motion_flame(StdMotions.WalkForward, 9);
+                modeNum = 0;
+                break;
+            default:
+                break;
+        }
+    }
 
     export function setAngle(angle: number[], msec: number) {
         let step = [0, 0, 0, 0, 0, 0, 0, 0];
