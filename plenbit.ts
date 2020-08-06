@@ -137,7 +137,7 @@ namespace plenbit {
     //% blockId=PLEN:bit_Sensor
     //% block="read sensor %num"
     export function sensorLR(num: LedLr) {
-        return (num == 16) ? AnalogPin.P2 : AnalogPin.P0;
+        return pins.analogReadPin( (num == 16) ? AnalogPin.P2 : AnalogPin.P0 );
     }
 
     //% blockId=PLEN:bit_Mic
