@@ -150,10 +150,8 @@ namespace plenbit {
     }
 
     //% block="Side %num, Mic Value %value, InitValue $adjust"
-    //% value=100
-    //% value.min=0 value.max=255
-    //% adjust=550
-    //% adjust.min=0 adjust.max=1023
+    //% value.min=0 value.max=255 value.defl=100
+    //% adjust.min=0 adjust.max=1023 adjust.defl=550
     export function checkMic(num: LedLr,value:number,adjust:number){
         let n = (num == 16) ? AnalogPin.P2 : AnalogPin.P0;
         if( pins.analogReadPin(n) <= (adjust-value) || (adjust+value) <= pins.analogReadPin(n) ){
@@ -164,9 +162,8 @@ namespace plenbit {
         }
     }
 
-    //% block="Side %num, Distance Value %value,
-    //% value=600
-    //% value.min=22 value.max=700
+    //% block="Side %num, Distance Value %value"
+    //% value.min=22 value.max=700 value.defl=600
     export function checkDistane(num: LedLr,value:number){
         let n = (num == 16) ? AnalogPin.P2 : AnalogPin.P0;
         if( value <= pins.analogReadPin(n) ){
