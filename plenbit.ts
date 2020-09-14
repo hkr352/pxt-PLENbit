@@ -106,8 +106,14 @@ namespace plenbit {
     enum MoveMotions {
 
     }
+    export enum WalkMode {
+        //% block="move"
+        Move = 1,
+        //% block="stop"
+        Stop = 0
+    }
 
-    export let motionSpeed = 20;
+    export let motionSpeed = 15;
     //[1000, 900, 300, 900, 800, 900, 1500, 900];good angle
     export let servoSetInit = [1000, 630, 300, 600, 240, 600, 1000, 720];
     let servoAngle = [1000, 630, 300, 600, 240, 600, 1000, 720];
@@ -118,12 +124,6 @@ namespace plenbit {
     //let plenDebug :boolean = false;
     loadPos();
     eyeLed(LedOnOff.On);
-
-    //% block
-    //% advanced=true
-    export function changeMotionSpeed(speed: number) {
-        motionSpeed = speed
-    }
 
     export function secretIncantation() {
         write8(0xFE, 0x85);//PRE_SCALE
@@ -140,6 +140,43 @@ namespace plenbit {
         return pins.analogReadPin( (num == 16) ? AnalogPin.P2 : AnalogPin.P0 );
     }
 
+    //% block="Init Mic %num"
+    export function initMic(num: LedLr){
+        let cal = 0;
+        for (let i = 0; i < 100; i++) {
+            cal += pins.analogReadPin( (num == 16) ? AnalogPin.P2 : AnalogPin.P0 )
+        }
+        return cal = cal / 100
+    }
+
+    //% block="Side %num, Mic Value %value, InitValue $adjust"
+    //% value=100
+    //% value.min=0 value.max=255
+    //% adjust=550
+    //% adjust.min=0 adjust.max=1023
+    export function checkMic(num: LedLr,value:number,adjust:number){
+        let n = (num == 16) ? AnalogPin.P2 : AnalogPin.P0;
+        if( pins.analogReadPin(n) <= (adjust-value) || (adjust+value) <= pins.analogReadPin(n) ){
+            return true
+        }
+        else{
+            return false
+        }
+    }
+
+    //% block="Side %num, Distance Value %value,
+    //% value=600
+    //% value.min=22 value.max=700
+    export function checkDistane(num: LedLr,value:number){
+        let n = (num == 16) ? AnalogPin.P2 : AnalogPin.P0;
+        if( value <= pins.analogReadPin(n) ){
+            return true
+        }
+        else{
+            return false
+        }
+    }
+
     //% blockId=PLEN:bit_Mic
     //% block="read Mic %num is If (Mic <= %low OR %up <= Mic)"
     // block="read Mic %num is If (Mic <= %low || %up <= Mic)"
@@ -151,6 +188,15 @@ namespace plenbit {
     //% block
     export function direction() {
         return Math.atan2(input.magneticForce(Dimension.X), input.magneticForce(Dimension.Z)) * 180 / 3.14 + 180
+    }
+
+    //% advanced=true
+    //% block="Motion Speed %speed"
+    //% speed.min=0 speed.max=20
+    export function changeMotionSpeed(speed: number) {
+        if(0 <= speed && speed <= 20){motionSpeed = speed;}
+        if(speed <= 0){motionSpeed = 0;}
+        if(speed >= 20){motionSpeed = 20;}
     }
 
     //% blockId=PLEN:bit_servo
@@ -194,31 +240,21 @@ namespace plenbit {
     export function soccerMotion(fileName: SocMotions) {
         motion(fileName);
     }
-
     //% blockId=PLEN:bit_motion_box
     //% block="play box motion %fileName"
     //% advanced=true
     export function boxMotion(fileName: BoxMotions) {
         motion(fileName);
     }
-
     //% blockId=PLEN:bit_motion_dan
     //% block="play dance motion %fileName"
     export function danceMotion(fileName: DanceMotions) {
         motion(fileName);
     }
-
     // blockId=PLEN:bit_motion_m
     // block="play move motion %fileName"
     export function moveMotion(fileName: MoveMotions) {
         motion(fileName);
-    }
-
-    export enum WalkMode {
-        //% block="move"
-        Move = 1,
-        //% block="stop"
-        Stop = 0
     }
 
     let modeNum=0;
@@ -452,12 +488,6 @@ namespace plenbit {
         }
         return adjustNum;
     }
-
-    function bleInit() {
-        serial.redirect(SerialPin.P8, SerialPin.P12, 115200);
-        pins.digitalWritePin(DigitalPin.P16, 0);
-        initBle = true;
-    }
     
     function parseIntM(str: string) {
         let len = str.length;
@@ -489,6 +519,12 @@ namespace plenbit {
             case 1: hex += (num[len - 1] * 0x0001);
         }
         return hex;
+    }
+
+    function bleInit() {
+        serial.redirect(SerialPin.P8, SerialPin.P12, 115200);
+        pins.digitalWritePin(DigitalPin.P16, 0);
+        initBle = true;
     }
 
     //% blockId=PLEN:bit_BLE
