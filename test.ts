@@ -16,9 +16,9 @@ basic.forever(function () {
 input.onButtonPressed(Button.A, function () {
     while(1){
         if(plenbit.sensorLR(plenbit.LedLr.BButtonSide) >= 700){
-            plenbit.walk(false);
+            plenbit.walk(plenbit.WalkMode.Stop);
         }else{
-            plenbit.walk(true);
+            plenbit.walk(plenbit.WalkMode.Move);
         }
         if(input.buttonIsPressed(Button.B)){
             break;
