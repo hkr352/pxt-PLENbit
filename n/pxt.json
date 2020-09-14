@@ -1,6 +1,6 @@
 {
     "name": "pxt-plenbit",
-    "version": "0.0.19",
+    "version": "0.0.8",
     "description": "plenbit",
     "dependencies": {
         "core": "*"
@@ -8,8 +8,12 @@
     "files": [
         "README.md",
         "plenbit.ts",
+        "enums.d.ts",
+        "shims.d.ts",
         "_locales/ja/pxt-plenbit-strings.json",
-        "_locales/ja/pxt-plenbit-jsdoc-strings.json"
+        "_locales/ja/pxt-plenbit-jsdoc-strings.json",
+        "custom.cpp",
+        "custom.ts"
     ],
     "testFiles": [
         "test.ts"
