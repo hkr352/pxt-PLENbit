@@ -189,7 +189,7 @@ namespace plenbit {
 
     //% advanced=true
     //% block="Motion Speed %speed"
-    //% speed.min=0 speed.max=20
+    //% speed.min=0 speed.max=20 speed.defl=15
     export function changeMotionSpeed(speed: number) {
         if(0 <= speed && speed <= 20){motionSpeed = speed;}
         if(speed <= 0){motionSpeed = 0;}
@@ -366,6 +366,9 @@ namespace plenbit {
         }
     }
 
+    //% block="Set Angle $angle, msec %msec"
+    //% msec.min=100 msec.max=1000 msec.defl=500
+    //% advanced=true
     export function setAngle(angle: number[], msec: number) {
         let step = [0, 0, 0, 0, 0, 0, 0, 0];
         msec = msec / motionSpeed;//now 15//default 10; //speedy 20   Speed Adj
