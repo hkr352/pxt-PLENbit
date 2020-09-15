@@ -140,6 +140,10 @@ namespace plenbit {
         return pins.analogReadPin( (num == 16) ? AnalogPin.P2 : AnalogPin.P0 );
     }
 
+    /**
+     * Make this block insert "on start", when using checkMic.
+     * @param num - plenbit.LedLr.AButtonSide or BButtonSide 
+    */
     //% block="Init Mic %num"
     export function initMic(num: LedLr){
         let cal = 0;
@@ -149,6 +153,12 @@ namespace plenbit {
         return cal = cal / 100
     }
 
+    /**
+     * check mic
+     * @param num 
+     * @param value 
+     * @param adjust 
+     */
     //% block="Side %num, Mic Value %value, InitValue $adjust"
     //% value.min=0 value.max=255 value.defl=100
     //% adjust.min=0 adjust.max=1023 adjust.defl=550
@@ -156,6 +166,7 @@ namespace plenbit {
         let n = (num == 16) ? AnalogPin.P2 : AnalogPin.P0;
         return ( pins.analogReadPin(n) <= (adjust-value) || (adjust+value) <= pins.analogReadPin(n) ) ? true:false;
     }
+
 
     //% block="Side %num, Distance Value %value"
     //% value.min=22 value.max=700 value.defl=600
@@ -173,6 +184,9 @@ namespace plenbit {
         return ( pins.analogReadPin(n) <= low || up <= pins.analogReadPin(n) ) ? true:false;
     }
 
+    /**
+     * You can get the angle in the direction that "PLEN: bit" is facing
+     */
     //% block
     export function direction() {
         return Math.atan2(input.magneticForce(Dimension.X), input.magneticForce(Dimension.Z)) * 180 / 3.14 + 180

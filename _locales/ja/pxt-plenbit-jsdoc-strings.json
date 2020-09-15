@@ -1,4 +1,6 @@
 {
   "plenbit": "Blocks for PLEN:bit",
-  "plenbit.eyeled": "This is test code."
+  "plenbit.eyeled": "This is test code.",
+  "plenbit.initMic":"マイクブロックを使う場合、'最初だけ'に入れることで、基準値を取得できます",
+  "plenbit.checkDistane":"距離センサの条件を設定"
 }
