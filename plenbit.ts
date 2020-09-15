@@ -11,12 +11,14 @@ namespace plenbit {
         //% block="B button"
         BButtonSide = 16
     }
+
     export enum LedOnOff {
         //% block="on"
         On = 0,
         //% block="off"
         Off = 1
     }
+
     export enum StdMotions {
         //% block="Walk Forward"
         WalkForward = 0x46,
@@ -49,20 +51,34 @@ namespace plenbit {
     }
 
     export enum BoxMotions {
+        //% block="Shake A Box"
         ShakeABox = 0x0a,
+        //% block="Pick Up High"
         PickUpHigh = 0x0b,
+        //% block="Pick Up Low"
         PickUpLow = 0x0c,
+        //% block="Receive a Box"
         ReceiveaBox = 0x0d,
+        //% block="Present a Box"
         PresentaBox = 0x0e,
+        //% block="Pass a Box"
         PassaBox = 0x0f,
+        //% block="Throw a Box"
         ThrowaBox = 0x10,
+        //% block="Put Down High"
         PutDownHigh = 0x11,
+        //% block="Put Down Low"
         PutDownLow = 0x12,
+        //% block="Carry For ward"
         CarryForward = 0x2A,
+        //% block="Carry L Turn"
         CarryLTurn = 0x2B,
+        //% block="Carry R Turn"
         CarryRTurn = 0x2c,
+        //% block="Carry Back"
         CarryBack = 0x2d
     }
+
     export enum SocMotions {
         //% block="Defense Left Step"
         DefenseLStep = 0x14,
@@ -83,6 +99,7 @@ namespace plenbit {
         //% block="Pass To Right"
         PassToRight = 0x1c
     }
+
     export enum DanceMotions {
         //% block="Dance Left Step"
         DanceLStep = 0x1e,
@@ -103,9 +120,8 @@ namespace plenbit {
         //% block="Twist Dance"
         TwistDance = 0x26
     }
-    enum MoveMotions {
+    enum MoveMotions {}
 
-    }
     export enum WalkMode {
         //% block="move"
         Move = 1,
@@ -141,7 +157,7 @@ namespace plenbit {
     }
 
     /**
-     * Make this block insert "on start", when using checkMic.
+     * Make this block insert "on start", when using checkMic. Use by substitution to a variable.
      * @param num - plenbit.LedLr.AButtonSide or BButtonSide 
     */
     //% block="Init Mic %num"
@@ -154,20 +170,25 @@ namespace plenbit {
     }
 
     /**
-     * check mic
-     * @param num 
-     * @param value 
-     * @param adjust 
+     * Check mic
+     * @param num - pins
+     * @param value - Threshold , Max: 1023 - 'Standard Value'
+     * @param adjust - Standard value
      */
+    // Threshold "しきい値"
     //% block="Side %num, Mic Value %value, InitValue $adjust"
-    //% value.min=0 value.max=255 value.defl=100
+    //% value.min=0 value.max=511 value.defl=100
     //% adjust.min=0 adjust.max=1023 adjust.defl=550
     export function checkMic(num: LedLr,value:number,adjust:number){
         let n = (num == 16) ? AnalogPin.P2 : AnalogPin.P0;
         return ( pins.analogReadPin(n) <= (adjust-value) || (adjust+value) <= pins.analogReadPin(n) ) ? true:false;
     }
 
-
+    /**
+     * Check distance
+     * @param num - pins
+     * @param value - Threshold
+     */
     //% block="Side %num, Distance Value %value"
     //% value.min=22 value.max=700 value.defl=600
     export function checkDistane(num: LedLr,value:number){
@@ -178,20 +199,23 @@ namespace plenbit {
     //% blockId=PLEN:bit_Mic
     //% block="read Mic %num is If (Mic <= %low OR %up <= Mic)"
     //% advanced=true
-    // block="read Mic %num is If (Mic <= %low || %up <= Mic)"
     export function readMic(num: LedLr,low: number,up: number){
         let n = (num == 16) ? AnalogPin.P2 : AnalogPin.P0;
         return ( pins.analogReadPin(n) <= low || up <= pins.analogReadPin(n) ) ? true:false;
     }
 
     /**
-     * You can get the angle in the direction that "PLEN: bit" is facing
+     * Get the angle in the direction that "PLEN: bit" is facing
      */
     //% block
     export function direction() {
         return Math.atan2(input.magneticForce(Dimension.X), input.magneticForce(Dimension.Z)) * 180 / 3.14 + 180
     }
 
+    /**
+     * Change the speed of the motion.
+     * @param speed - 0 ~ 20, The larger this value, the faster.
+     */
     //% block="Motion Speed %speed"
     //% speed.min=0 speed.max=20 speed.defl=15
     //% advanced=true
@@ -367,6 +391,11 @@ namespace plenbit {
         }
     }
 
+    /**
+     * Eight servos can be controlled at once
+     * @param angle 8 arrays
+     * @param msec 100 ~ 1000
+     */
     //% block="Set Angle $angle, msec %msec"
     //% msec.min=100 msec.max=1000 msec.defl=500
     //% advanced=true
@@ -590,6 +619,10 @@ namespace plenbit {
         initPCA9865 == false;
     }
 
+    /**
+     * Eye LED
+     * @param ledOnOff 
+     */
     //% block="eye led is %onoff"
     export function eyeLed(ledOnOff: LedOnOff) {
         pins.digitalWritePin(DigitalPin.P8, ledOnOff);
