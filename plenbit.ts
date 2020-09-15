@@ -6,9 +6,9 @@
 //% weight=100 color=#00A654 icon="\uf085" block="PLEN:bit"
 namespace plenbit {
     export enum LedLr {
-        //% block="A button side"
+        //% block="A button"
         AButtonSide = 8,
-        //% block="B button side"
+        //% block="B button"
         BButtonSide = 16
     }
     export enum LedOnOff {
@@ -154,28 +154,19 @@ namespace plenbit {
     //% adjust.min=0 adjust.max=1023 adjust.defl=550
     export function checkMic(num: LedLr,value:number,adjust:number){
         let n = (num == 16) ? AnalogPin.P2 : AnalogPin.P0;
-        if( pins.analogReadPin(n) <= (adjust-value) || (adjust+value) <= pins.analogReadPin(n) ){
-            return true
-        }
-        else{
-            return false
-        }
+        return ( pins.analogReadPin(n) <= (adjust-value) || (adjust+value) <= pins.analogReadPin(n) ) ? true:false;
     }
 
     //% block="Side %num, Distance Value %value"
     //% value.min=22 value.max=700 value.defl=600
     export function checkDistane(num: LedLr,value:number){
         let n = (num == 16) ? AnalogPin.P2 : AnalogPin.P0;
-        if( value <= pins.analogReadPin(n) ){
-            return true
-        }
-        else{
-            return false
-        }
+        return ( value <= pins.analogReadPin(n) ) ? true:false;
     }
 
     //% blockId=PLEN:bit_Mic
     //% block="read Mic %num is If (Mic <= %low OR %up <= Mic)"
+    //% advanced=true
     // block="read Mic %num is If (Mic <= %low || %up <= Mic)"
     export function readMic(num: LedLr,low: number,up: number){
         let n = (num == 16) ? AnalogPin.P2 : AnalogPin.P0;
@@ -187,9 +178,9 @@ namespace plenbit {
         return Math.atan2(input.magneticForce(Dimension.X), input.magneticForce(Dimension.Z)) * 180 / 3.14 + 180
     }
 
-    //% advanced=true
     //% block="Motion Speed %speed"
     //% speed.min=0 speed.max=20 speed.defl=15
+    //% advanced=true
     export function changeMotionSpeed(speed: number) {
         if(0 <= speed && speed <= 20){motionSpeed = speed;}
         if(speed <= 0){motionSpeed = 0;}
@@ -304,12 +295,8 @@ namespace plenbit {
         doMotion(fileName,0xff);
     }
 
-    //% blockId=PLEN:bit_motionFlame
-    //% block="play motion number %fileName number%flameNum"
-    //% fileName.min=0 fileName.max=73
-    //% flameNum.min=0 flameNum.max=20
-    //% advanced=true
-    export function motionFlame(fileName: number, flameNum: number) {
+    // block="play motion number %fileName number%flameNum"
+    function motionFlame(fileName: number, flameNum: number) {
         doMotion(fileName,flameNum);
     }
 

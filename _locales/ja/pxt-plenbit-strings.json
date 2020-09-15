@@ -66,5 +66,9 @@
   "plenbit.resetPosition|block":"保存されている初期位置を削除",
   "plenbit.savePositon|block":"位置を保存 %servoNum %adjustNum",
   "plenbit.servoAdjust|block":"サーボ調整 %servoNum %adjustNum",
-  "plenbit.servoFree|block":"サーボをフリーにする"
+  "plenbit.servoFree|block":"サーボをフリーにする",
+  "plenbit.initMic|block":"%num マイク初期化",
+  "plenbit.checkMic|block":"%num, マイクが %value以上のとき, (基準値 $adjust )",
+  "plenbit.checkDistane|block":"%num 距離が %value 以上のとき",
+  "plenbit.setAngle|block":"サーボを %msec ミリ秒で 角度を $angle にする、 "
 }
