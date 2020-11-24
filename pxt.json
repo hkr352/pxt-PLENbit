@@ -3,7 +3,8 @@
     "version": "0.0.19",
     "description": "plenbit",
     "dependencies": {
-        "core": "*"
+        "core": "*",
+        "neopixel": "github:microsoft/pxt-neopixel#v0.7.3"
     },
     "files": [
         "README.md",
