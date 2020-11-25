@@ -130,6 +130,8 @@ namespace plenbit {
     }
 
     export let motionSpeed = 15;
+    export let milliSec = 1;
+    
     //[1000, 900, 300, 900, 800, 900, 1500, 900];good angle
     export let servoSetInit = [1000, 630, 300, 600, 240, 600, 1000, 720];
     let servoAngle = [1000, 630, 300, 600, 240, 600, 1000, 720];
@@ -138,8 +140,49 @@ namespace plenbit {
     let initBle:boolean = false;
     let initPCA9865:boolean = false;
     //let plenDebug :boolean = false;
+    let plenStrip: neopixel.Strip = null
+    let neoInitBool = false;
     loadPos();
     eyeLed(LedOnOff.On);
+
+    //% block
+    export function neoInit(){
+        plenStrip = neopixel.create(DigitalPin.P16, 2, NeoPixelMode.RGB_RGB)
+        plenStrip.setBrightness(50)
+        neoInitBool = true;
+    }
+
+    //% block
+    export function neoClear(){
+        plenStrip.clear();
+    }
+    
+    //% block
+    export function setColor(color: NeoPixelColors, wait:number)
+    {
+      if(!neoInitBool)neoInit();
+      plenStrip.showColor(neopixel.colors(color))
+      basic.pause(wait);
+    }
+    
+
+    /**
+     * Eye LED
+     * @param ledOnOff 
+     */
+    //% block="eye led is %onoff"
+    export function eyeLed(ledOnOff: LedOnOff) {
+        if(neoInitBool)neoClear();
+        pins.digitalWritePin(DigitalPin.P8, ledOnOff);
+        pins.digitalWritePin(DigitalPin.P16, ledOnOff);
+    }
+    
+    //% block
+    //% num.min=0 num.max=20 num.defl=1
+    //% advanced=true
+    export function changeMotionDelay(num : number ){
+        milliSec = num;
+    }   
 
     export function secretIncantation() {
         write8(0xFE, 0x85);//PRE_SCALE
@@ -224,6 +267,8 @@ namespace plenbit {
         if(speed <= 0){motionSpeed = 0;}
         if(speed >= 20){motionSpeed = 20;}
     }
+
+
 
     //% blockId=PLEN:bit_servo
     //% block="servo motor %num|number %degrees|degrees"
@@ -413,7 +458,8 @@ namespace plenbit {
                 servoAngle[val] += step[val];
                 servoWrite(val, (servoAngle[val] / 10));
             }
-            //basic.pause(1); //Nakutei yoi
+            basic.pause(milliSec); //Nakutei yoi
+            //control.waitMicros(micros);
         }
     }
 
@@ -619,15 +665,7 @@ namespace plenbit {
         initPCA9865 == false;
     }
 
-    /**
-     * Eye LED
-     * @param ledOnOff 
-     */
-    //% block="eye led is %onoff"
-    export function eyeLed(ledOnOff: LedOnOff) {
-        pins.digitalWritePin(DigitalPin.P8, ledOnOff);
-        pins.digitalWritePin(DigitalPin.P16, ledOnOff);
-    }
+
     
     // Super Advance Code
 
