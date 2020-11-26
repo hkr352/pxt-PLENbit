@@ -3,7 +3,7 @@
 plenbit.servoInitialSet()
 let mic = plenbit.initMic(plenbit.LedLr.AButtonSide)
 plenbit.eyeLed(plenbit.LedOnOff.On)
-plenbit.setColor(NeoPixelColors.Green, 0)
+plenbit.setColor(NeoPixelColors.Green)
 let plenStrip = plenbit.createPlenEye()
 plenbit.eyeLed(plenbit.LedOnOff.On)
 basic.showIcon(IconNames.Happy)
