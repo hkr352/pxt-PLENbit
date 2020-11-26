@@ -1,7 +1,7 @@
 // tests go here; this will not be compiled when this package is used as a library
 
 plenbit.servoInitialSet()
-let plenMic = plenbit.initMic(plenbit.LedLr.AButtonSide)
+let mic = plenbit.initMic(plenbit.LedLr.AButtonSide)
 plenbit.eyeLed(plenbit.LedOnOff.On)
 plenbit.setColor(NeoPixelColors.Green, 0)
 let plenStrip = plenbit.createPlenEye()
@@ -11,7 +11,7 @@ basic.showIcon(IconNames.Happy)
 basic.forever(function () {
     if (plenbit.checkDistane(plenbit.LedLr.BButtonSide, 600)) {
         plenbit.danceMotion(plenbit.DanceMotions.DanceLStep)
-    } else if (plenbit.checkMic(plenbit.LedLr.AButtonSide, 100, 550)) {
+    } else if (plenbit.checkMic(plenbit.LedLr.AButtonSide, 150, mic)) {
         plenbit.soccerMotion(plenbit.SocMotions.DefenseLStep)
     } else if (plenbit.direction() == 352) {
         plenbit.stdMotion(plenbit.StdMotions.ArmPataPata)

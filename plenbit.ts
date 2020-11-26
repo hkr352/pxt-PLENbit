@@ -154,16 +154,15 @@ namespace plenbit {
         return plenStrip;
     }// update 11/26
 
-    //% block
+    //% block="Show color %color for Eye LED"
     //% weight=99
-    export function setColor(color: NeoPixelColors, wait:number)
+    export function setColor(color: NeoPixelColors)
     {
       if(!plenEyeCreated)createPlenEye();
       plenStrip.showColor(neopixel.colors(color))
-      basic.pause(wait);
     }// update 11/26
 
-    //% block
+    //% block="clear eye led"
     // weight=98
     //% advanced=true
     export function clearPlenEye(): void {
@@ -204,8 +203,10 @@ namespace plenbit {
     */
     //% block="Init Mic %num"
     //% weight=77
-    export function initMic(num: LedLr){
+    //% blockSetVariable=mic
+    export function initMic(num: LedLr):number{
         let cal = 0;
+        basic.pause(10);
         for (let i = 0; i < 100; i++) {
             cal += pins.analogReadPin( (num == 16) ? AnalogPin.P2 : AnalogPin.P0 )
         }
@@ -220,7 +221,7 @@ namespace plenbit {
      */
     // Threshold "しきい値"
     //% block="Side %num, Mic Value %value, InitValue $adjust"
-    //% value.min=0 value.max=511 value.defl=100
+    //% value.min=0 value.max=511 value.defl=150
     //% adjust.min=0 adjust.max=1023 adjust.defl=550
     //% weight=78
     export function checkMic(num: LedLr,value:number,adjust:number){
