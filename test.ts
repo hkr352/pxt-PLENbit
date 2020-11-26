@@ -1,61 +1,41 @@
 // tests go here; this will not be compiled when this package is used as a library
 
-
-basic.showLeds(`
-    . . . . .
-    . # . # .
-    . . . . .
-    # . . . #
-    . # # # .
-    `);
+plenbit.servoInitialSet()
+let plenMic = plenbit.initMic(plenbit.LedLr.AButtonSide)
+plenbit.eyeLed(plenbit.LedOnOff.On)
+plenbit.setColor(NeoPixelColors.Green, 0)
+let plenStrip = plenbit.createPlenEye()
+plenbit.eyeLed(plenbit.LedOnOff.On)
+basic.showIcon(IconNames.Happy)
 
 basic.forever(function () {
-    //plenbit.serialread()
-
+    if (plenbit.checkDistane(plenbit.LedLr.BButtonSide, 600)) {
+        plenbit.danceMotion(plenbit.DanceMotions.DanceLStep)
+    } else if (plenbit.checkMic(plenbit.LedLr.AButtonSide, 100, 550)) {
+        plenbit.soccerMotion(plenbit.SocMotions.DefenseLStep)
+    } else if (plenbit.direction() == 352) {
+        plenbit.stdMotion(plenbit.StdMotions.ArmPataPata)
+    } else if (600 == plenbit.sensorLR(plenbit.LedLr.BButtonSide)) {
+        plenbit.changeMotionSpeed(20)
+        plenbit.setAngle([0, 0, 0, 0, 0, 0, 0, 0], 500)
+        plenbit.motion(0)
+    } else {
+    	
+    }
 })
 input.onButtonPressed(Button.A, function () {
-    while(1){
-        if(plenbit.sensorLR(plenbit.LedLr.BButtonSide) >= 700){
-            plenbit.walk(plenbit.WalkMode.Stop);
-        }else{
-            plenbit.walk(plenbit.WalkMode.Move);
-        }
-        if(input.buttonIsPressed(Button.B)){
-            break;
-        }
-    }
-    // //plenbit.dance_motion(plenbit.danceMotions.DanceLStep)
-    // //plenbit.stdMotion(plenbit.StdMotions.ArmPataPata)
-    // plenbit.motion_flame(plenbit.StdMotions.WalkForward, 0);
-    // plenbit.motion_flame(plenbit.StdMotions.WalkForward, 1);
-    // for (let i = 0; i <= 3; i++) {
-    //     plenbit.motion_flame(plenbit.StdMotions.WalkForward, 2);
-    //     plenbit.motion_flame(plenbit.StdMotions.WalkForward, 3);
-    //     plenbit.motion_flame(plenbit.StdMotions.WalkForward, 4);
-    //     plenbit.motion_flame(plenbit.StdMotions.WalkForward, 5);
-    //     plenbit.motion_flame(plenbit.StdMotions.WalkForward, 6);
-    //     plenbit.motion_flame(plenbit.StdMotions.WalkForward, 7);
-    // }
-    // plenbit.motion_flame(plenbit.StdMotions.WalkForward, 8);
-    // plenbit.motion_flame(plenbit.StdMotions.WalkForward, 9);
-
+    plenbit.walk(plenbit.WalkMode.Move)
+    plenbit.walk(plenbit.WalkMode.Stop)
+    plenbit.servoWrite(0, 0)
+    plenbit.servoFree()
+    plenbit.servoInitialSet()
 })
 input.onButtonPressed(Button.B, function () {
-    //plenbit.servoFree();
-    plenbit.motion(plenbit.StdMotions.WalkForward);
-})
-
-/*
-basic.forever(function () {
-    plenbit.serialread()
-    if (pins.analogReadPin(AnalogPin.P0) <= 500) {
-        plenbit.Move_motion(plenbit.moveMotions.PataPata)
-        basic.pause(100)
-    } else {
-        if (pins.analogReadPin(AnalogPin.P2) >= 650) {
-            plenbit.Move_motion(plenbit.moveMotions.WalkBack)
-            basic.pause(100)
-        }
+    while (true) {
+        plenbit.serialRead()
     }
 })
-*/
+input.onButtonPressed(Button.AB, function () {
+    plenbit.savePositon(0, 0)
+    plenbit.resetPosition()
+})

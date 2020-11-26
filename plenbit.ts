@@ -129,9 +129,7 @@ namespace plenbit {
         Stop = 0
     }
 
-    export let motionSpeed = 15;
-    export let milliSec = 1;
-    
+    export let motionSpeed = 20;// update 11/26
     //[1000, 900, 300, 900, 800, 900, 1500, 900];good angle
     export let servoSetInit = [1000, 630, 300, 600, 240, 600, 1000, 720];
     let servoAngle = [1000, 630, 300, 600, 240, 600, 1000, 720];
@@ -139,50 +137,50 @@ namespace plenbit {
     let romAdr1 = 0x56;
     let initBle:boolean = false;
     let initPCA9865:boolean = false;
-    //let plenDebug :boolean = false;
-    let plenStrip: neopixel.Strip = null
-    let neoInitBool = false;
+    let plenDebug :boolean = false;
+    let plenStrip: neopixel.Strip = null// update 11/26
+    let plenEyeCreated = false;// update 11/26
     loadPos();
     eyeLed(LedOnOff.On);
 
-    //% block
-    export function neoInit(){
+    //% block="PLEN Eye"
+    // weight=0
+    //% blockSetVariable=plenStrip
+    //% advanced=true
+    export function createPlenEye():neopixel.Strip{
         plenStrip = neopixel.create(DigitalPin.P16, 2, NeoPixelMode.RGB_RGB)
         plenStrip.setBrightness(50)
-        neoInitBool = true;
-    }
+        plenEyeCreated = true;
+        return plenStrip;
+    }// update 11/26
 
     //% block
-    export function neoClear(){
-        plenStrip.clear();
-    }
-    
-    //% block
+    //% weight=99
     export function setColor(color: NeoPixelColors, wait:number)
     {
-      if(!neoInitBool)neoInit();
+      if(!plenEyeCreated)createPlenEye();
       plenStrip.showColor(neopixel.colors(color))
       basic.pause(wait);
-    }
-    
+    }// update 11/26
 
+    //% block
+    // weight=98
+    //% advanced=true
+    export function clearPlenEye(): void {
+        plenStrip.clear();
+    }// update 11/26
+    
     /**
      * Eye LED
      * @param ledOnOff 
      */
     //% block="eye led is %onoff"
+    //% weight=100
     export function eyeLed(ledOnOff: LedOnOff) {
-        if(neoInitBool)neoClear();
+        if(plenEyeCreated)clearPlenEye();
         pins.digitalWritePin(DigitalPin.P8, ledOnOff);
         pins.digitalWritePin(DigitalPin.P16, ledOnOff);
     }
-    
-    //% block
-    //% num.min=0 num.max=20 num.defl=1
-    //% advanced=true
-    export function changeMotionDelay(num : number ){
-        milliSec = num;
-    }   
 
     export function secretIncantation() {
         write8(0xFE, 0x85);//PRE_SCALE
@@ -195,6 +193,7 @@ namespace plenbit {
 
     //% blockId=PLEN:bit_Sensor
     //% block="read sensor %num"
+    //% weight=76
     export function sensorLR(num: LedLr) {
         return pins.analogReadPin( (num == 16) ? AnalogPin.P2 : AnalogPin.P0 );
     }
@@ -204,6 +203,7 @@ namespace plenbit {
      * @param num - plenbit.LedLr.AButtonSide or BButtonSide 
     */
     //% block="Init Mic %num"
+    //% weight=77
     export function initMic(num: LedLr){
         let cal = 0;
         for (let i = 0; i < 100; i++) {
@@ -222,6 +222,7 @@ namespace plenbit {
     //% block="Side %num, Mic Value %value, InitValue $adjust"
     //% value.min=0 value.max=511 value.defl=100
     //% adjust.min=0 adjust.max=1023 adjust.defl=550
+    //% weight=78
     export function checkMic(num: LedLr,value:number,adjust:number){
         let n = (num == 16) ? AnalogPin.P2 : AnalogPin.P0;
         return ( pins.analogReadPin(n) <= (adjust-value) || (adjust+value) <= pins.analogReadPin(n) ) ? true:false;
@@ -234,6 +235,7 @@ namespace plenbit {
      */
     //% block="Side %num, Distance Value %value"
     //% value.min=22 value.max=700 value.defl=600
+    //% weight=79
     export function checkDistane(num: LedLr,value:number){
         let n = (num == 16) ? AnalogPin.P2 : AnalogPin.P0;
         return ( value <= pins.analogReadPin(n) ) ? true:false;
@@ -251,29 +253,29 @@ namespace plenbit {
      * Get the angle in the direction that "PLEN: bit" is facing
      */
     //% block
+    //% weight=75
     export function direction() {
         return Math.atan2(input.magneticForce(Dimension.X), input.magneticForce(Dimension.Z)) * 180 / 3.14 + 180
     }
 
     /**
      * Change the speed of the motion.
-     * @param speed - 0 ~ 20, The larger this value, the faster.
+     * @param speed - 0 ~ 50, The larger this value, the faster.
      */
     //% block="Motion Speed %speed"
-    //% speed.min=0 speed.max=20 speed.defl=15
+    //% speed.min=0 speed.max=50 speed.defl=20
     //% advanced=true
     export function changeMotionSpeed(speed: number) {
-        if(0 <= speed && speed <= 20){motionSpeed = speed;}
+        if(0 <= speed && speed <= 50){motionSpeed = speed;}
         if(speed <= 0){motionSpeed = 0;}
-        if(speed >= 20){motionSpeed = 20;}
-    }
-
-
+        if(speed >= 50){motionSpeed = 50;}
+    }// update 11/26
 
     //% blockId=PLEN:bit_servo
     //% block="servo motor %num|number %degrees|degrees"
     //% num.min=0 num.max=11
     //% degrees.min=0 degrees.max=180
+    //% weight=84
     export function servoWrite(num: number, degrees: number) {
         let servoNum = 0x08;
         if (initPCA9865 == false) {
@@ -303,11 +305,13 @@ namespace plenbit {
 
     //% blockId=PLEN:bit_motion_std
     //% block="play std motion %fileName"
+    //% weight=90
     export function stdMotion(fileName: StdMotions) {
         motion(fileName);
     }
     //% blockId=PLEN:bit_motion_Soc
     //% block="play soccer motion %fileName"
+    //% weight=89
     export function soccerMotion(fileName: SocMotions) {
         motion(fileName);
     }
@@ -319,6 +323,7 @@ namespace plenbit {
     }
     //% blockId=PLEN:bit_motion_dan
     //% block="play dance motion %fileName"
+    //% weight=88
     export function danceMotion(fileName: DanceMotions) {
         motion(fileName);
     }
@@ -331,6 +336,7 @@ namespace plenbit {
     let modeNum=0;
     //% blockId=PLEN:bit_walk
     //% block="walk %mode"
+    //% weight=85
     export function walk(mode: WalkMode){
         
         if(mode == 1){
@@ -446,22 +452,27 @@ namespace plenbit {
     //% advanced=true
     export function setAngle(angle: number[], msec: number) {
         let step = [0, 0, 0, 0, 0, 0, 0, 0];
-        msec = msec / motionSpeed;//now 15//default 10; //speedy 20   Speed Adj
-        for (let val = 0; val < 8; val++) {
+        msec = msec / motionSpeed;//now 20 //default 10; //speedy 30
+        for (let val = 0; val < SERVO_NUM_USED; val++) {
             let target = (servoSetInit[val] - angle[val]);
             if (target != servoAngle[val]) {  // Target != Present
                 step[val] = (target - servoAngle[val]) / (msec);
             }
         }
-        for (let i = 0; i <= msec; i++) {
-            for (let val = 0; val < 8; val++) {
+        for (let i = 0; i <= msec; i++)
+        {
+            let nowTime = input.runningTime();
+            for (let val = 0; val < SERVO_NUM_USED; val++) {
                 servoAngle[val] += step[val];
                 servoWrite(val, (servoAngle[val] / 10));
+            }// 1 loop: v1 10~17ms, v2 6~10ms
+
+            nowTime = input.runningTime() - nowTime;
+            if( (nowTime) < 17 ) {
+                basic.pause(17 - nowTime);
             }
-            basic.pause(milliSec); //Nakutei yoi
-            //control.waitMicros(micros);
         }
-    }
+    }// update 11/26
 
     function num2Hex(num: number) {
         let i:number = 0;
