@@ -3,7 +3,7 @@
 /**
  * Blocks for PLEN:bit
  */
-//% weight=100 color=#00A654 icon="\uf085" block="PLEN:bit"
+//% weight=100 color=#00A654 icon="\uf0a0" block="PLEN:bit"
 namespace plenbit {
     export enum LedLr {
         //% block="A button"
@@ -149,12 +149,13 @@ namespace plenbit {
     //% advanced=true
     export function createPlenEye():neopixel.Strip{
         plenStrip = neopixel.create(DigitalPin.P16, 2, NeoPixelMode.RGB_RGB)
-        plenStrip.setBrightness(50)
+        plenStrip.setBrightness(12)
         plenEyeCreated = true;
         return plenStrip;
     }// update 11/26
 
     //% block="Show color %color for Eye LED"
+    //% color.defl=NeoPixelColors.Green
     //% weight=99
     export function setColor(color: NeoPixelColors)
     {
