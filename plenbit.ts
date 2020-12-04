@@ -447,6 +447,14 @@ namespace plenbit {
      * Eight servos can be controlled at once
      * @param angle 8 arrays : -90 ~ 90
      * @param msec 100 ~ 1000
+     * @param ls -90 ~ 90
+     * @param lt -90 ~ 90
+     * @param la -90 ~ 90
+     * @param lf -90 ~ 90
+     * @param rs -90 ~ 90
+     * @param rt -90 ~ 90
+     * @param ra -90 ~ 90
+     * @param rf -90 ~ 90
      */
     //% block="Set Angle -180.0 ~ 180.0|0:Left Shoulder : $ls|1:Left Thigh    : $lt|2:Left Arm      : $la|3:Left Foot     : $lf|4:Right Shoulder: $rs|5:Right Thigh   : $rt|6:Right Arm     : $ra|7:Right Foot    : $rf|msec %msec"
     //% msec.min=100 msec.max=1000 msec.defl=500
